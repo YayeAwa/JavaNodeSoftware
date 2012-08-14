@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<display-name>TAP-VAMDC</display-name>
+	<filter>
+		<filter-name>TapConfFilter</filter-name>
+		<filter-class>org.vamdc.tapservice.util.SettingsFilter</filter-class>
+		<init-param>
+			<param-name>tapservice.configuration</param-name>
+			<param-value>/WEB-INF/config/tapservice.conf</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>TapConfFilter</filter-name>
+		<url-pattern>/config</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>CayenneFilter</filter-name>
+		<filter-class>org.apache.cayenne.conf.WebApplicationContextFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CayenneFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>jerseyFilter</filter-name>
+		<filter-class>com.sun.jersey.spi.container.servlet.ServletContainer</filter-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>org.vamdc.tapservice</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.config.feature.Redirect</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.config.feature.ImplicitViewables</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.WebPageContentRegex</param-name>
+			<param-value>/static/.*</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+			<param-value>org.vamdc.tapservice.util.ParamsCaseFilter</param-value>
+		</init-param>
+
+	</filter>
+	<filter-mapping>
+		<filter-name>jerseyFilter</filter-name>
+		<url-pattern>/VOSI/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>jerseyFilter</filter-name>
+		<url-pattern>/TAP/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>jerseyFilter</filter-name>
+		<url-pattern>/config</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>jerseyFilter</filter-name>
+		<url-pattern>/clear_cache</url-pattern>
+	</filter-mapping>
+	<context-param>
+		<param-name>cayenne.configuration.path</param-name>
+		<param-value>/WEB-INF/config/cayenne</param-value>
+	</context-param>
+</web-app>
