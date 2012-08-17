@@ -73,7 +73,9 @@ public abstract class JAXBMarshaller<T> implements MessageBodyWriter<T> {
 					logger.debug("Marshalled document "+type.toString());
 			}
 		} catch (JAXBException e) {
-			throw new IOException(e.getMessage());
+			e.printStackTrace();
+			throw new IOException(e.getMessage()+e.getCause().getMessage());
+			
 		}
 		
 	}

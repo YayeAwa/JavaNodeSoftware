@@ -17,7 +17,7 @@ import javax.ws.rs.QueryParam;
 public interface TAPInterface {
 	@Path("/sync")
 	@GET
-	@Produces({"application/x-xsams+xml","application/x-votable+xml"})
+	@Produces({"application/x-xsams+xml","application/x-votable+xml","text/xml"})
 	public abstract Object getSyncResponse(
 			@QueryParam("REQUEST") String requestType,
 			@QueryParam("VERSION") String version,
@@ -30,7 +30,7 @@ public interface TAPInterface {
 	
 	@Path("/sync")
 	@POST
-	@Produces({"application/x-xsams+xml","application/x-votable+xml"})
+	@Produces({"application/x-xsams+xml","application/x-votable+xml","text/xml"})
 	public abstract Object postSyncQuery(
 			@FormParam("REQUEST") String requestType,
 			@FormParam("VERSION") String version,
@@ -43,7 +43,7 @@ public interface TAPInterface {
 	
 	@Path("/sync")
 	@HEAD
-	@Produces({"application/x-xsams+xml","application/x-votable+xml"})
+	@Produces({"application/x-xsams+xml","application/x-votable+xml","text/xml"})
 	public abstract Object getSyncHead(
 			@QueryParam("REQUEST") String requestType,
 			@QueryParam("VERSION") String version,

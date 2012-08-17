@@ -9,11 +9,12 @@ import net.ivoa.xml.votable.v1.VOTABLE;
 
 
 @Provider
-@Produces("application/x-votable+xml")
+@Produces({"application/x-votable+xml","text/xml"})
 public class VOTableMarshaller extends JAXBMarshaller<VOTABLE> {
 
 	public VOTableMarshaller() throws IOException{
 		super(VOTABLE.class);
+		this.XSLTHref="../static/VOTableError.xsl";
 	}
 
 }

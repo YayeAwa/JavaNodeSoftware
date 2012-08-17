@@ -209,7 +209,7 @@ public class AvailabilityMonitor implements Runnable{
 	
 	public static String getStatusNote() {
 		checkRunning();
-		return "Monitor"+getMonitor().lastState.getMessage()+"plugin"+DBPlugTalker.getErrorMessage();
+		return "Monitor "+getMonitor().lastState.getMessage()+" plugin "+DBPlugTalker.getErrorMessage();
 	}
 
 	public static XMLGregorianCalendar getUpSince() {
