@@ -49,7 +49,7 @@ public class RequestProcess implements RequestInterface {
 	public RequestProcess(String query, Collection<Restrictable> restrictables) {
 		Query parsedQuery = null;
 		try {
-			parsedQuery = VSSParser.parse(query);
+			parsedQuery = VSSParser.parse(query,restrictables);
 		} catch (IllegalArgumentException e) {
 			errors.add("Malformed query: " + e.getMessage());
 		}

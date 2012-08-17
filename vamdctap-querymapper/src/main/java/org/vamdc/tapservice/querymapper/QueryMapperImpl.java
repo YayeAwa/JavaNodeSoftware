@@ -82,7 +82,7 @@ public class QueryMapperImpl implements QueryMapper{
 		if (mapper!=null)
 			return mapper.translateAlias(node, queryIndex,alias,replacement);
 		else 
-			throw new IllegalArgumentException("Query contains a keyword that is not supported");
+			throw new IllegalArgumentException("Query contains a keyword "+node.getColumn()+" that is somehow not supported");
 			//TODO: add configuration option to return true here
 	}
 	
