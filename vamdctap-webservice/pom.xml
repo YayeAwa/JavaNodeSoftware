@@ -1,90 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.vamdc.tapservice</groupId>
-	<artifactId>TAP-VAMDC-FRAMEWORK</artifactId>
-	<version>12.07-SNAPSHOT</version>
+	
+	<parent>
+		<groupId>org.vamdc.tap</groupId>
+		<artifactId>vamdctap-parent</artifactId>
+		<version>12.07</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	
+	<artifactId>vamdctap-webservice</artifactId>
 	<packaging>war</packaging>
 
 
-	<name>TAP-VAMDC framework</name>
-	<description>Framework to glue together all VAMDC TAPservice libraries</description>
-	<url>http://vamdc.doronin.org/sites/TAP-VAMDC-FRAMEWORK</url>
-
-	<scm>
-		<connection>scm:svn:http://svn.ntl.nnov.ru/misdoro/TAP-VAMDC-FRAMEWORK/trunk</connection>
-		<developerConnection>scm:svn:http://svn.ntl.nnov.ru/misdoro/TAP-VAMDC-FRAMEWORK/trunk</developerConnection>
-		<url>http://svn.ntl.nnov.ru/misdoro/TAP-VAMDC-FRAMEWORK/trunk</url>
-	</scm>
-
-
-	<repositories>
-		<repository>
-			<id>vamdc repository</id>
-			<name>VAMDC tapservice stuff for Maven</name>
-			<url>http://vamdc.doronin.org/maven/</url>
-			<layout>default</layout>
-		</repository>
-		<repository>
-			<id>javanet repository</id>
-			<name>Java.net Repository for Maven</name>
-			<url>http://download.java.net/maven/2/</url>
-			<layout>default</layout>
-		</repository>
-	</repositories>
-
-	<distributionManagement>
-		<repository>
-			<id>vamdcrepo</id>
-			<name>VAMDC releases</name>
-			<url>ftp://doronin.org/</url>
-		</repository>
-		<site>
-			<id>vamdcsites</id>
-			<url>ftp://doronin.org/TAP-VAMDC-FRAMEWORK</url>
-		</site>
-	</distributionManagement>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.0.2</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-		</plugins>
-		<extensions>
-			<!-- Enabling the use of FTP -->
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>1.0-beta-6</version>
-			</extension>
-		</extensions>
-	</build>
-
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.7</version>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jxr-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>2.6</version>
-			</plugin>
-		</plugins>
-	</reporting>
-
+	<name>VAMDC-TAP webservice implementation</name>
+	<description>VAMDC-TAP webservice implementation, handles requests processing</description>
+	
 	<dependencies>
 		<dependency>
 			<groupId>mysql</groupId>
@@ -112,29 +42,23 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.10</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.vamdc.xml</groupId>
-			<artifactId>vosi</artifactId>
-			<version>1.0</version>
+			<groupId>net.ivoa</groupId>
+			<artifactId>mappings</artifactId>
+			<version>12.07r1-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.vamdc.xml</groupId>
 			<artifactId>xsams-io</artifactId>
-			<version>12.07-SNAPSHOT</version>
+			<version>12.07</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.vamdc.tapservice</groupId>
-			<artifactId>TAP-VAMDC-Interfaces</artifactId>
-			<version>12.07-SNAPSHOT</version>
+			<groupId>org.vamdc.tap</groupId>
+			<artifactId>vamdctap-interfaces</artifactId>
+			<version>12.07</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
@@ -160,16 +84,9 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.vamdc.tapservice</groupId>
-			<artifactId>CayenneUtil</artifactId>
-			<version>2.0-SNAPSHOT</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.ivoa</groupId>
-			<artifactId>VOTable</artifactId>
-			<version>1.2</version>
+			<groupId>org.vamdc.tap</groupId>
+			<artifactId>vamdctap-querymapper</artifactId>
+			<version>${project.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>

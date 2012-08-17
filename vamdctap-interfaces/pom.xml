@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>org.apache.cayenne</groupId>
 			<artifactId>cayenne-server</artifactId>
-			<version>3.0.2</version>
+			<version>${dependency.cayenne.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>org.vamdc.tapservice</groupId>
 			<artifactId>VSSParser</artifactId>
-			<version>12.07</version>
+			<version>${dependency.vssparser.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
