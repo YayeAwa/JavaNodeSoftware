@@ -13,7 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.xml.bind.JAXBException;
 
-import org.vamdc.tapservice.util.Settings;
+import org.vamdc.tapservice.util.Setting;
 import org.vamdc.xsams.io.IOSettings;
 import org.vamdc.xsams.io.JAXBContextFactory;
 import org.vamdc.xsams.schema.XSAMSData;
@@ -29,7 +29,7 @@ public class XSAMSMarshaller implements MessageBodyWriter<XSAMSData> {
 	public XSAMSMarshaller() throws IOException{
 		JAXBContextFactory.getContext();
 		IOSettings.prettyprint.setIntValue(0);
-		if (Settings.isTrue(Settings.SETTING_OUTPUT_PRETTYPRINT))
+		if (Setting.xsams_prettyprint.isEnabled())
 			IOSettings.prettyprint.setIntValue(1);
 
 	}

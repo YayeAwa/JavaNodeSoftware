@@ -22,7 +22,7 @@ import org.vamdc.tapservice.vss2.VSSParser;
 import org.vamdc.tapservice.api.RequestInterface;
 import org.vamdc.dictionary.HeaderMetrics;
 import org.vamdc.dictionary.Requestable;
-import org.vamdc.tapservice.util.Settings;
+import org.vamdc.tapservice.util.Setting;
 import org.vamdc.tapservice.util.XSAMSMetrics;
 import org.vamdc.xsams.XSAMSManager;
 import org.vamdc.xsams.XSAMSFactory;
@@ -181,7 +181,7 @@ public class RequestProcess implements RequestInterface {
 		base.header(
 				"Content-Disposition",
 				"attachment; filename="
-						+ Settings.getValue(Settings.SETTING_XSAMSID_PREFIX)
+						+ Setting.xsams_idprefix.getValue()
 						+ (new Date().toString().replace(" ", "_")) + ".xsams");
 		return base;
 	}

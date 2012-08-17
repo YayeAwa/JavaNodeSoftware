@@ -16,6 +16,10 @@ import org.vamdc.xsams.util.XSAMSSettings;
 
 public class SettingsFilter implements Filter{
 
+	public final static String CONFIGURATION_PARAMETER_NAME="tapservice.configuration";
+	public final static String CONFIGURATION_PARAMETER_NAME_DEFAULT="/WEB-INF/config/tapservice.properties";
+
+	
 	@Override
 	public void destroy() {
 		
@@ -29,20 +33,19 @@ public class SettingsFilter implements Filter{
 	@Override
 	public void init(FilterConfig conf) throws ServletException {
 		ServletContext context = conf.getServletContext();
-		Settings.getSettings();
-		Settings.loadConfig(context,conf.getInitParameter(Settings.CONFIGURATION_PARAMETER_NAME));
+		Setting.load(context, conf.getInitParameter(CONFIGURATION_PARAMETER_NAME));
 		
 		//Initialize slave configurations
 		//XSAMS setting
-		XSAMSSettings.idPrefix.setStrValue(Settings.getValue(Settings.SETTING_XSAMSID_PREFIX));
-		if (Settings.isTrue(Settings.SETTING_ENABLE_LIMITS)){
-			XSAMSSettings.processesLimit.setIntValue(Settings.getIntValue(Settings.SETTING_PROCESSES_LIMIT));
-			XSAMSSettings.statesLimit.setIntValue(Settings.getIntValue(Settings.SETTING_STATES_LIMIT));
+		XSAMSSettings.idPrefix.setStrValue(Setting.xsams_idprefix.getValue());
+		if (Setting.limits.isEnabled()){
+			XSAMSSettings.processesLimit.setIntValue(Setting.limit_processes.getInt());
+			XSAMSSettings.statesLimit.setIntValue(Setting.limit_states.getInt());
 		}
 		
 		//Init db plug instance
 		DBPlugTalker.getDBPlug();
-		DBPlugTalker.loadPlug(Settings.getValue(Settings.SETTING_DATABASE_PLUG_CLASS));
+		DBPlugTalker.loadPlug(Setting.class_plugin.getValue());
 	}
 
 }

@@ -101,7 +101,7 @@ public class AvailabilityMonitor implements Runnable{
 			}
 			lastState=currentState;
 			
-			long sleeptime=1000*Long.parseLong(Settings.getValue(Settings.SETTING_SELFCHECK_INTERVAL));
+			long sleeptime=1000L*Setting.selfcheck_interval.getInt();
 			try {
 				Thread.sleep(sleeptime);
 			} catch (InterruptedException e) {
@@ -135,7 +135,7 @@ public class AvailabilityMonitor implements Runnable{
 		//Check if we can get something from DB:
 		Class<?> daoclass;
 		try {
-			daoclass = Class.forName(Settings.getValue(Settings.SETTING_DAO_AVAILABILITY_CLASS));
+			daoclass = Class.forName(Setting.class_dao_availability.getValue());
 			SelectQuery dbQuery=new SelectQuery(daoclass);
 		
 			dbQuery.setFetchLimit(10);
@@ -156,7 +156,7 @@ public class AvailabilityMonitor implements Runnable{
 	private ErrorCode selfCheck(ObjectContext context){
 		//Check service configuration
 		logger.debug("Check config");
-		if (!Settings.isConfigured()) return ErrorCode.CF_NONE;
+		if (!Setting.isConfigured()) return ErrorCode.CF_NONE;
 		
 		logger.debug("check plugin");
 		if (!DBPlugTalker.checkPlugin())

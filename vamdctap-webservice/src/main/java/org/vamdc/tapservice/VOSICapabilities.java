@@ -15,14 +15,14 @@ import net.ivoa.xml.vosicapabilities.v1.Capabilities;
 
 import org.vamdc.dictionary.Restrictable;
 import org.vamdc.tapservice.util.DBPlugTalker;
-import org.vamdc.tapservice.util.Settings;
+import org.vamdc.tapservice.util.Setting;
 import org.vamdc.xml.vamdc_tap.v1.VamdcTap;
 
 
 public class VOSICapabilities {
 	public static Capabilities get(){
 
-		final String baseurl = Settings.getValue(Settings.SETTING_BASEURL);
+		final String baseurl = Setting.baseurls.getValue();
 
 		Collection<String> baseurls = new ArrayList<String>(){private static final long serialVersionUID = 9120067172144791872L;{
 			for (String base:baseurl.split("#")){
@@ -49,7 +49,7 @@ public class VOSICapabilities {
 		mycap.setVersionOfStandards("12.07");
 
 		//Publish sample queries
-		String queries = Settings.getValue(Settings.SETTING_TEST_QUERIES);
+		String queries = Setting.test_queries.getValue();
 		if (queries!=null && queries.length()>0)
 			for (String query:queries.split(";")){
 				if (query.length()>1)
