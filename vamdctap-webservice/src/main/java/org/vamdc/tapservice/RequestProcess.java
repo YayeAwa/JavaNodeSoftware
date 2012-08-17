@@ -11,7 +11,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.cayenne.BaseContext;
 import org.apache.cayenne.ObjectContext;
-import org.apache.cayenne.access.DataContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vamdc.dictionary.Restrictable;
@@ -142,7 +141,7 @@ public class RequestProcess implements RequestInterface {
 	 * @param metrics - metrics attached to produced XSAMS document
 	 * @return
 	 */
-	private ResponseBuilder setHeaders(ResponseBuilder base,XSAMSMetrics metrics){
+	private static ResponseBuilder setHeaders(ResponseBuilder base,XSAMSMetrics metrics){
 		
 		for (HeaderMetrics hdr: HeaderMetrics.values()){
 			String header = hdr.name().replace("_", "-");//Headers contain "-", we use "_" for variable names
@@ -172,24 +171,24 @@ public class RequestProcess implements RequestInterface {
 	}
 
 	//Returns response with all headers set
-	public ResponseBuilder getResponse(){
+	public Response getResponse(){
 		ResponseBuilder myrb;
 		XSAMSMetrics metrics = new XSAMSMetrics((XSAMSData)xsamsroot);
 		if (!this.isValid()){
-			myrb = Response.status(Status.BAD_REQUEST);
-			myrb.entity(new VOTableError("error :("));
-			myrb.type("application/x-votable+xml");
+			myrb = Response.status(Status.BAD_REQUEST)
+				.entity(new VOTableError("error :("))
+				.type("application/x-votable+xml");
 		}
 		else {
 			if (metrics.isEmpty())
 				myrb = Response.noContent();
 			else{
 				myrb = Response.ok((XSAMSData)xsamsroot);
-				myrb = setHeaders(myrb, metrics);
+				setHeaders(myrb, metrics);
 			}
 		}
 		
-		return myrb;
+		return myrb.build();
 	}
 
 	public ResponseBuilder getHeadResponse(Map<HeaderMetrics, Integer> metrics) {

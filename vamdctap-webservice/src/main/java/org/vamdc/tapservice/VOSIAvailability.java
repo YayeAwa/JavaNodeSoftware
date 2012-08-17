@@ -20,7 +20,7 @@ public class VOSIAvailability {
 		XMLGregorianCalendar backAt = AvailabilityMonitor.getBackAt();
 		if (backAt!=null)
 			myavail.setBackAt(backAt);
-		myavail.getNotes().add(AvailabilityMonitor.getStatusNote());
+		myavail.getNote().add(AvailabilityMonitor.getStatusNote());
 		
 		return myavail;
 	}

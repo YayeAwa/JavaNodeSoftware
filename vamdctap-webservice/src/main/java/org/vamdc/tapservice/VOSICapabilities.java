@@ -27,6 +27,7 @@ public class VOSICapabilities {
 		Collection<String> baseurls = new ArrayList<String>(){private static final long serialVersionUID = 9120067172144791872L;{
 			for (String base:baseurl.split("#")){
 				try {
+					@SuppressWarnings("unused")
 					URL service = new URL(base);
 					add(base);
 				} catch (MalformedURLException e) {}
@@ -41,7 +42,7 @@ public class VOSICapabilities {
 
 		//Publish restrictables
 		for (Restrictable rest:DBPlugTalker.getRestrictables())
-			mycap.getRestrictables().add(rest.name());
+			mycap.getRestrictable().add(rest.name());
 
 		//Publish software versions
 		mycap.setVersionOfSoftware("Java VAMDC-TAP implementation 12.07");
@@ -52,15 +53,15 @@ public class VOSICapabilities {
 		if (queries!=null && queries.length()>0)
 			for (String query:queries.split(";")){
 				if (query.length()>1)
-					mycap.getSampleQueries().add(query+";");
+					mycap.getSampleQuery().add(query+";");
 			}
 
-		returned.getCapabilities().add(mycap);
+		returned.getCapability().add(mycap);
 
-		returned.getCapabilities().add(
+		returned.getCapability().add(
 				createCapability(new Capability(),"ivo://ivoa.net/std/VOSI#capabilities",
 						baseurls,"/VOSI/capabilities"));
-		returned.getCapabilities().add(
+		returned.getCapability().add(
 				createCapability(new Capability(),"ivo://ivoa.net/std/VOSI#availability",
 						baseurls,"/VOSI/availability"));
 
@@ -76,11 +77,11 @@ public class VOSICapabilities {
 			AccessURL servaddr = new AccessURL();
 			servaddr.setUse("base");
 			servaddr.setValue(serviceURL+serviceSuffix);
-			servint.getAccessURLs().add(servaddr);
+			servint.getAccessURL().add(servaddr);
 		}
 
 
-		mycap.getInterfaces().add(servint);
+		mycap.getInterface().add(servint);
 		return mycap;
 	}
 

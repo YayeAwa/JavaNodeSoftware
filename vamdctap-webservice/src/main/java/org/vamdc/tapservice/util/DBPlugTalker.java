@@ -9,12 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vamdc.dictionary.HeaderMetrics;
 import org.vamdc.dictionary.Restrictable;
-import org.vamdc.tapservice.api.DatabasePlug;
+import org.vamdc.tapservice.api.DatabasePlugin;
 import org.vamdc.tapservice.api.RequestInterface;
 
 public class DBPlugTalker{
 	
-	private DatabasePlug plug;
+	private DatabasePlugin plug;
 	
 	private static class PlugHolder{
 		private final static DBPlugTalker stored=new DBPlugTalker();
@@ -33,8 +33,8 @@ public class DBPlugTalker{
 		
 		try {
 			
-			DatabasePlug dbPlugInst = (DatabasePlug) Class.forName(className).newInstance();
-			plug.setPlug(dbPlugInst);
+			DatabasePlugin dbPlugInst = (DatabasePlugin) Class.forName(className).newInstance();
+			plug.setPlugin(dbPlugInst);
 			logger.debug("Instantiated db plug");
 		} catch (ClassNotFoundException e) {
 			logger.error("db plug class not found "+e.getMessage());
@@ -54,40 +54,40 @@ public class DBPlugTalker{
 		}
 	}
 
-	public DatabasePlug getPlug(){
+	public DatabasePlugin getPlugin(){
 		return this.plug;
 	}
 	
-	public void setPlug(DatabasePlug plug) {
+	public void setPlugin(DatabasePlugin plug) {
 		this.plug = plug;
 	}
 
 	public static void buildXSAMS(RequestInterface userRequest) {
-		if (getDBPlug().getPlug()!=null)
-			getDBPlug().getPlug().buildXSAMS(userRequest);
+		if (getDBPlug().getPlugin()!=null)
+			getDBPlug().getPlugin().buildXSAMS(userRequest);
 	}
 	
 	public static Map<HeaderMetrics,Integer> getMetrics(RequestInterface userRequest) {
-		if (getDBPlug().getPlug()!=null)
-			return getDBPlug().getPlug().getMetrics(userRequest);
+		if (getDBPlug().getPlugin()!=null)
+			return getDBPlug().getPlugin().getMetrics(userRequest);
 		
 		return new HashMap<HeaderMetrics,Integer>();
 	}
 
 	public static Collection<Restrictable> getRestrictables() {
-		if (getDBPlug().getPlug()!=null)
-			return getDBPlug().getPlug().getRestrictables();
+		if (getDBPlug().getPlugin()!=null)
+			return getDBPlug().getPlugin().getRestrictables();
 		else 
 			return new ArrayList<Restrictable>();
 	}
 	
 	public static boolean checkPlugin(){
-		return getDBPlug().getPlug()!=null && getDBPlug().getPlug().isAvailable();
+		return getDBPlug().getPlugin()!=null && getDBPlug().getPlugin().isAvailable();
 	}
 	
 	public static String getErrorMessage(){
-		if (getDBPlug().getPlug()!=null)
-			return getDBPlug().getPlug().getErrorMessage();
+		if (getDBPlug().getPlugin()!=null)
+			return getDBPlug().getPlugin().getErrorMessage();
 		return "Database plugin not loaded";
 	}
 	

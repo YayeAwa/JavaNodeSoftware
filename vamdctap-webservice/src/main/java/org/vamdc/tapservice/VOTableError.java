@@ -18,11 +18,11 @@ public class VOTableError extends VOTABLE{
 		super();
 		Resource res = new Resource();
 		res.setType("RESULTS");
-		this.getCOOSYSAndGROUPSAndPARAMS().add(res);
+		this.getRESOURCE().add(res);
 		
 		Info text = new Info();
-		res.getINFOSAndCOOSYSAndGROUPS().add(text);
-		text.setInfoValue("ERROR");
+		res.getINFO().add(text);
+		text.setValueAttribute("ERROR");
 		text.setName("QUERY_STATUS");
 		text.setValue(errText);
 

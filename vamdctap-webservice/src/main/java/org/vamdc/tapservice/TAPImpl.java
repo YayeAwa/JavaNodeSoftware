@@ -31,7 +31,7 @@ public class TAPImpl implements TAPInterface {
 		
 		//Return document
 		myrequest.finishRequest();
-		return myrequest.getResponse().build();
+		return myrequest.getResponse();
 	}
 
 	@Override
