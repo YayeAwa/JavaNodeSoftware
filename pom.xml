@@ -14,8 +14,10 @@
 	</organization>
 	
 	<modules>
+		<module>vamdctap-querymapper</module>
 		<module>vamdctap-interfaces</module>
 		<module>vamdctap-webservice</module>
+		<module>vamdctap-pluginparent</module>
 	</modules>
 	
 	<scm>

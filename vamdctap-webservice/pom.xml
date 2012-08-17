@@ -58,7 +58,7 @@
 		<dependency>
 			<groupId>org.vamdc.tap</groupId>
 			<artifactId>vamdctap-interfaces</artifactId>
-			<version>12.07</version>
+			<version>${project.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
