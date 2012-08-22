@@ -18,7 +18,7 @@
   
   <xsl:template match="vot:INFO[@value='ERROR']">
   		<p style="color:#ff0000">
-          	<xsl:value-of select="/"/>
+          	<xsl:value-of select="."/>
         </p>
   </xsl:template>
   
