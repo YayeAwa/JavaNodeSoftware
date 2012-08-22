@@ -65,100 +65,60 @@ public class RequestProcess implements RequestInterface {
 		this.query = parsedQuery;
 		this.Valid = false;
 		if (query != null && query.getRestrictsList() != null)
-			this.Valid = query.getRestrictsList().size() > 0;
+			this.Valid = (query.getRestrictsList().size() > 0);
 
 		logger = LoggerFactory.getLogger("org.vamdc.tapservice");
 		reqstart = new Date();
 
 	}
 
-	public void finishRequest() {
-		// Called before sending data to user, to put time in log
-		if (query != null)
-			logger.info("Request query " + query.getQuery() + " finished in "
-					+ (new Double(new Date().getTime() - reqstart.getTime()))
-					/ 1000.0 + "s");
-		if (query != null && query.getRestrictsTree() != null) {
-			logger.debug("Tree string:" + query.getRestrictsTree().toString());
-			for (RestrictExpression re : query.getRestrictsList()) {
-				logger.debug("Query param:" + re.getColumnName() + "comp"
-						+ re.getOperator() + "val" + re.getValue());
-			}
-		}
-	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.vamdc.tapservice.RequestInterface#getXsamsManager()
-	 */
+
+	@Override
 	public XSAMSManager getXsamsManager() {
 		return xsamsroot;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.vamdc.tapservice.RequestInterface#getCayenneContext()
-	 */
+	@Override
 	public ObjectContext getCayenneContext() {
 		return context;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.vamdc.tapservice.RequestInterface#getRestricts()
-	 */
+	@Override
 	public List<RestrictExpression> getRestricts() {
 		return query.getRestrictsList();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.vamdc.tapservice.RequestInterface#getRestrictsTree()
-	 */
+	@Override
 	public LogicNode getRestrictsTree() {
 		return query.getRestrictsTree();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.vamdc.tapservice.api.RequestInterface#checkRequestable(Requestable)
-	 * Also checks if tapservice is configured to force source references
-	 */
+	@Override
 	public boolean checkBranch(Requestable branch) {
 		return query.checkSelectBranch(branch);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.vamdc.tapservice.RequestInterface#isValid()
-	 */
+	@Override
 	public boolean isValid() {
-		return Valid;
+		return errors.isEmpty() && Valid;
 	}
-
-	/*
-	 * Get user's query
-	 */
+	
+	@Override
 	public String getQueryString() {
 		return query.getQuery();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.vamdc.tapservice.RequestInterface#getLogger()
-	 */
+	@Override
 	public Logger getLogger(Class<?> className) {
 		if (className == null)
 			return logger;
 		return LoggerFactory.getLogger(className);
+	}
+	
+	@Override
+	public Query getQuery() {
+		return query;
 	}
 
 	/**
@@ -211,8 +171,23 @@ public class RequestProcess implements RequestInterface {
 		return base;
 	}
 
+	void finishRequest() {
+		// Called before sending data to user, to put time in log
+		if (query != null)
+			logger.info("Request query " + query.getQuery() + " finished in "
+					+ (new Double(new Date().getTime() - reqstart.getTime()))
+					/ 1000.0 + "s");
+		if (query != null && query.getRestrictsTree() != null) {
+			logger.debug("Tree string:" + query.getRestrictsTree().toString());
+			for (RestrictExpression re : query.getRestrictsList()) {
+				logger.debug("Query param:" + re.getColumnName() + "comp"
+						+ re.getOperator() + "val" + re.getValue());
+			}
+		}
+	}
+	
 	// Returns response with all headers set
-	public Response getResponse() {
+	Response getResponse() {
 		ResponseBuilder myrb;
 		XSAMSMetrics metrics = new XSAMSMetrics((XSAMSData) xsamsroot);
 		if (!this.isValid()) {
@@ -231,7 +206,7 @@ public class RequestProcess implements RequestInterface {
 		return myrb.build();
 	}
 
-	public ResponseBuilder getHeadResponse(Map<HeaderMetrics, Integer> metrics) {
+	ResponseBuilder getHeadResponse(Map<HeaderMetrics, Integer> metrics) {
 		ResponseBuilder myrb;
 		if (!this.isValid()) {
 			myrb = Response.status(Status.BAD_REQUEST);
@@ -247,9 +222,13 @@ public class RequestProcess implements RequestInterface {
 		return myrb;
 	}
 
-	@Override
-	public Query getQuery() {
-		return query;
+	void setErrors(Collection<String> messages){
+		if (messages!=null)
+			this.errors.addAll(messages);
+	}
+	
+	void addError(String message){
+		this.errors.add(message);
 	}
 
 }
