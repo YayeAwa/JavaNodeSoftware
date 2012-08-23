@@ -13,11 +13,26 @@
 	<packaging>war</packaging>
 
 
-	<name>VAMDC-TAP webservice implementation</name>
+	<name>Java VAMDC-TAP node implementation v.${project.version}</name>
 	<description>VAMDC-TAP webservice implementation, handles requests processing</description>
 
 	<build>
-		
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+						</manifest>
+					</archive>
+					<archiveClasses>true</archiveClasses>
+				</configuration>
+			</plugin>
+		</plugins>
+
 	</build>
 
 

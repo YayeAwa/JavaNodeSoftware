@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>org.vamdc.tap</groupId>
 			<artifactId>vamdctap-queryparser</artifactId>
-			<version>${dependency.vssparser.version}</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>

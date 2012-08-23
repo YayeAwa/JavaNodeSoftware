@@ -37,9 +37,9 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.vamdc.tapservice</groupId>
-			<artifactId>VSSParser</artifactId>
-			<version>${dependency.vssparser.version}</version>
+			<groupId>org.vamdc.tap</groupId>
+			<artifactId>vamdctap-queryparser</artifactId>
+			<version>${project.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>

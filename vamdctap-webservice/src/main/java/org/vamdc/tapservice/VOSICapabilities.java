@@ -45,8 +45,9 @@ public class VOSICapabilities {
 			mycap.getRestrictable().add(rest.name());
 
 		//Publish software versions
-		mycap.setVersionOfSoftware("Java VAMDC-TAP implementation 12.07");
-		mycap.setVersionOfStandards("12.07");
+		
+		mycap.setVersionOfSoftware(new Versions().getSWVer());
+		mycap.setVersionOfStandards(new Versions().getStdVer());
 
 		//Publish sample queries
 		String queries = Setting.test_queries.getValue();
@@ -83,6 +84,17 @@ public class VOSICapabilities {
 
 		mycap.getInterface().add(servint);
 		return mycap;
+	}
+	private static class Versions {
+		private String getSWVer(){
+			return this.getClass().getPackage().getImplementationTitle();
+		}
+		
+		private String getStdVer(){
+			return this.getClass().getPackage().getImplementationVersion().substring(0,5);
+			
+		}
+		
 	}
 
 }
