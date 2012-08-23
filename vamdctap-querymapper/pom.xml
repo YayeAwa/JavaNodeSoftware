@@ -22,8 +22,8 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.vamdc.tapservice</groupId>
-			<artifactId>VSSParser</artifactId>
+			<groupId>org.vamdc.tap</groupId>
+			<artifactId>vamdctap-queryparser</artifactId>
 			<version>${dependency.vssparser.version}</version>
 			<scope>compile</scope>
 		</dependency>

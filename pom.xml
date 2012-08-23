@@ -14,6 +14,7 @@
 	</organization>
 	
 	<modules>
+		<module>vamdctap-queryparser</module>
 		<module>vamdctap-querymapper</module>
 		<module>vamdctap-interfaces</module>
 		<module>vamdctap-webservice</module>
@@ -36,7 +37,6 @@
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<dependency.vssparser.version>12.07</dependency.vssparser.version>
 		<dependency.cayenne.version>3.0.2</dependency.cayenne.version>
 	</properties>
 	
