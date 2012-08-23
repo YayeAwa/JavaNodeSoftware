@@ -49,7 +49,6 @@ public class TAPImpl implements TAPInterface {
 		
 	}
 
-	//TODO: verify HEAD requests processing 
 	@Override
 	public Response getSyncHead(String requestType, String version,
 			String queryLang, String query, String outputFormat,
@@ -60,7 +59,7 @@ public class TAPImpl implements TAPInterface {
 		
 		verifyParameters(queryLang, outputFormat, myrequest);
 		
-		Map<HeaderMetrics,Integer> metrics = null;
+		Map<HeaderMetrics,Object> metrics = null;
 		//If request is valid, estimate sizes
 		if (myrequest.isValid()){
 			metrics=DBPlugTalker.getMetrics(myrequest);

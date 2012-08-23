@@ -1,8 +1,7 @@
 package org.vamdc.tapservice.util;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -67,18 +66,18 @@ public class DBPlugTalker{
 			getDBPlug().getPlugin().buildXSAMS(userRequest);
 	}
 	
-	public static Map<HeaderMetrics,Integer> getMetrics(RequestInterface userRequest) {
+	public static Map<HeaderMetrics,Object> getMetrics(RequestInterface userRequest) {
 		if (getDBPlug().getPlugin()!=null)
 			return getDBPlug().getPlugin().getMetrics(userRequest);
 		
-		return new HashMap<HeaderMetrics,Integer>();
+		return Collections.emptyMap();
 	}
 
 	public static Collection<Restrictable> getRestrictables() {
 		if (getDBPlug().getPlugin()!=null)
 			return getDBPlug().getPlugin().getRestrictables();
 		else 
-			return new ArrayList<Restrictable>();
+			return Collections.emptyList();
 	}
 	
 	public static boolean checkPlugin(){

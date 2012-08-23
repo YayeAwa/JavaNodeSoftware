@@ -1,6 +1,7 @@
 package org.vamdc.tapservice.api;
 
 import java.util.Collection;
+import java.util.Date;
 
 import org.apache.cayenne.ObjectContext;
 import org.slf4j.Logger;
@@ -74,5 +75,11 @@ public interface RequestInterface {
 	 * @return true if that part is requested
 	 */
 	public abstract boolean checkBranch(Requestable branch);
+	
+	/**
+	 * Set the date corresponding to the last-modified date response header
+	 * @param date java.util.Date reflecting the newest response record date
+	 */
+	public abstract void setLastModified(Date date); 
 
 }

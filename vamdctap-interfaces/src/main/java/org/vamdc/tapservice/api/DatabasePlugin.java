@@ -38,10 +38,10 @@ public interface DatabasePlugin {
 	 * may become used in future versions
 	 * 
 	 * @param userRequest the same RequestInterface structure as for buildXSAMS.
-	 * @return map of HeaderMetrics and their values. Omitted headers would get the value of 0.
+	 * @return map of HeaderMetrics and their values. Omitted headers would not be outputed.
 	 * 
 	 */
-	public abstract Map<HeaderMetrics,Integer> getMetrics(RequestInterface userRequest);
+	public abstract Map<HeaderMetrics,Object> getMetrics(RequestInterface userRequest);
 	
 	/**
 	 * Do some really node-specific availability checks

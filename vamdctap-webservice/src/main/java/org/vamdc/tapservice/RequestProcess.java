@@ -38,6 +38,7 @@ public class RequestProcess implements RequestInterface {
 	public boolean Valid;
 	private Date reqstart;
 	private Logger logger;
+	private Date lastModified=null;
 
 	private Collection<String> errors = new ArrayList<String>();
 
@@ -120,55 +121,69 @@ public class RequestProcess implements RequestInterface {
 	public Query getQuery() {
 		return query;
 	}
+	
+	@Override
+	public void setLastModified(Date date) {
+		if (this.lastModified==null || (date!=null && lastModified.before(date))){
+			lastModified = date;
+		}
+	}
 
 	/**
 	 * Set headers for response, based on the XSAMS document metrics
 	 * 
-	 * @param base
+	 * @param respBuild
 	 * @param metrics
 	 *            - metrics attached to produced XSAMS document
 	 * @return
 	 */
-	private static ResponseBuilder setHeaders(ResponseBuilder base,
+	private ResponseBuilder setHeaders(ResponseBuilder respBuild,
 			XSAMSMetrics metrics) {
 
 		for (HeaderMetrics hdr : HeaderMetrics.values()) {
 			String header = hdr.name().replace("_", "-");// Headers contain "-",
 															// we use "_" for
 															// variable names
-			base.header(header, metrics.getMetric(hdr));
+			respBuild.header(header, metrics.getMetric(hdr));
 		}
-		base.header(
+		respBuild.header(
 				"Content-Disposition",
 				"attachment; filename="
 						+ Setting.xsams_idprefix.getValue()
 						+ (new Date().toString().replace(" ", "_")) + ".xsams");
-		return base;
+		if (this.lastModified!=null)
+			respBuild.lastModified(lastModified);
+		return respBuild;
 	}
 
 	/**
 	 * Set headers, based on estimation. Is used for HEAD request processing and
 	 * will be used for stream generation.
 	 * 
-	 * @param base
+	 * @param respBuild
 	 *            response
 	 * @param metrics
 	 *            estimated response metrics map
 	 * @return response with appended headers
 	 */
-	private ResponseBuilder setEstimateHeaders(ResponseBuilder base,
-			Map<HeaderMetrics, Integer> metrics) {
+	private ResponseBuilder setEstimateHeaders(ResponseBuilder respBuild,
+			Map<HeaderMetrics, Object> metrics) {
 		for (HeaderMetrics hdr : HeaderMetrics.values()) {
 			String header = hdr.name().replace("_", "-");// Headers contain "-",
 															// we use "_" for
 															// variable names
 			String value = "0";
-			if (metrics != null && metrics.get(hdr) != null) {
-				value = metrics.get(hdr).toString();
-				base.header(header, value);
+			//VAMDC custom headers
+			if (metrics != null && metrics.get(hdr) != null){
+				if (header.startsWith("VAMDC")) {
+					value = metrics.get(hdr).toString();
+					respBuild.header(header, value);
+				}
 			}
 		}
-		return base;
+		if (this.lastModified!=null)
+			respBuild.lastModified(lastModified);
+		return respBuild;
 	}
 
 	void finishRequest() {
@@ -206,7 +221,7 @@ public class RequestProcess implements RequestInterface {
 		return myrb.build();
 	}
 
-	ResponseBuilder getHeadResponse(Map<HeaderMetrics, Integer> metrics) {
+	ResponseBuilder getHeadResponse(Map<HeaderMetrics, Object> metrics) {
 		ResponseBuilder myrb;
 		if (!this.isValid()) {
 			myrb = Response.status(Status.BAD_REQUEST);
@@ -230,5 +245,7 @@ public class RequestProcess implements RequestInterface {
 	void addError(String message){
 		this.errors.add(message);
 	}
+
+
 
 }
