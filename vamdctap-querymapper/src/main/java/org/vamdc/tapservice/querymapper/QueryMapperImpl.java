@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.cayenne.exp.Expression;
+import org.apache.cayenne.exp.ExpressionFactory;
 import org.vamdc.dictionary.Restrictable;
 import org.vamdc.tapservice.vss2.LogicNode;
 import org.vamdc.tapservice.vss2.LogicNode.Operator;
@@ -26,12 +27,18 @@ public class QueryMapperImpl implements QueryMapper{
 
 	@Override
 	public Expression mapTree(LogicNode root, int queryIndex) {
-		return mapSubTree(root,queryIndex,null,null);
+		if (root!=null)
+			return mapSubTree(root,queryIndex,null,null);
+		else 
+			return ExpressionFactory.expTrue();
 	}
 	
 	@Override
 	public Expression mapAliasedTree(LogicNode root, int queryIndex,String alias, String replacement) {
-		return mapSubTree(root,queryIndex,alias,replacement);
+		if (root!=null)
+			return mapSubTree(root,queryIndex,alias,replacement);
+		else 
+			return ExpressionFactory.expTrue();
 	}
 
 	@Override
