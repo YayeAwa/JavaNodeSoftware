@@ -35,7 +35,7 @@ public class RequestProcess implements RequestInterface {
 	private XSAMSManager xsamsroot;
 	private ObjectContext context;
 	private Query query;
-	public boolean Valid;
+	public boolean valid;
 	private Date reqstart;
 	private Logger logger;
 	private Date lastModified=null;
@@ -64,9 +64,10 @@ public class RequestProcess implements RequestInterface {
 		this.xsamsroot = xsamsroot;
 		this.context = context;
 		this.query = parsedQuery;
-		this.Valid = false;
+		this.valid = false;
 		if (query != null && query.getRestrictsList() != null)
-			this.Valid = (query.getRestrictsList().size() > 0);
+			this.valid = (query.getRestrictsList().size() > 0) 
+			|| query.getQuery().trim().toLowerCase().startsWith("select species");
 
 		logger = LoggerFactory.getLogger("org.vamdc.tapservice");
 		reqstart = new Date();
@@ -102,7 +103,7 @@ public class RequestProcess implements RequestInterface {
 
 	@Override
 	public boolean isValid() {
-		return errors.isEmpty() && Valid;
+		return errors.isEmpty() && valid;
 	}
 	
 	@Override
