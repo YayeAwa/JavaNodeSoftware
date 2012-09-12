@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.vamdc.tap</groupId>
 	<artifactId>vamdctap-parent</artifactId>
-	<version>12.07</version>
+	<version>12.07r1</version>
 	<packaging>pom</packaging>
 	
 	<name>Parent project for Java VAMDC-TAP node software</name>
