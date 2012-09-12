@@ -19,8 +19,8 @@ public enum Setting {
 	xsams_idprefix("xsams_id_prefix","DBNAME"),
 	class_dao_availability("dao_test_class","org.vamdc.database.dao.ClassName"),
 	class_plugin("database_plug_class","org.vamdc.database.tap.OutputBuilder"),
-	test_queries("test_queries","select species where atomsymbol like '%';select * where inchikey='UGFAIRIUMAVXCW-UHFFFAOYSA-N'");
-	
+	test_queries("test_queries","select species where atomsymbol like '%';select * where inchikey='UGFAIRIUMAVXCW-UHFFFAOYSA-N'"),
+	returnables("returnables","keyword1;keyword2;..."),
 	
 	;
 	

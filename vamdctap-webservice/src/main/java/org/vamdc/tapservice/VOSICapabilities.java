@@ -43,6 +43,14 @@ public class VOSICapabilities {
 		//Publish restrictables
 		for (Restrictable rest:DBPlugTalker.getRestrictables())
 			mycap.getRestrictable().add(rest.name());
+		
+		//Publish returnables from configuration
+		String returnables = Setting.returnables.getValue();
+		if (returnables!=null && returnables.length()>0)
+			for (String kword:returnables.split(";")){
+				if (kword.trim().length()>1)
+					mycap.getReturnable().add(kword);
+			}
 
 		//Publish software versions
 		
@@ -53,7 +61,7 @@ public class VOSICapabilities {
 		String queries = Setting.test_queries.getValue();
 		if (queries!=null && queries.length()>0)
 			for (String query:queries.split(";")){
-				if (query.length()>1)
+				if (query.trim().length()>1)
 					mycap.getSampleQuery().add(query+";");
 			}
 
