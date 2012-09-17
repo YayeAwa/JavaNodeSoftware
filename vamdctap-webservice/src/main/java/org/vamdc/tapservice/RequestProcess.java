@@ -65,7 +65,7 @@ public class RequestProcess implements RequestInterface {
 		this.context = context;
 		this.query = parsedQuery;
 		this.valid = false;
-		if (query != null && query.getRestrictsList() != null)
+		if (query != null && query.getRestrictsList() != null && query.getQuery()!=null)
 			this.valid = (query.getRestrictsList().size() > 0) 
 			|| query.getQuery().trim().toLowerCase().startsWith("select species");
 
