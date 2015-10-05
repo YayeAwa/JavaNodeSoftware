@@ -31,13 +31,13 @@
 		<repository>
 			<id>nexus</id>
 			<name>VAMDC Releases</name>
-			<url>http://dev.vamdc.org/nexus/content/groups/public</url>
+			<url>http://nexus.vamdc.org/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<dependency.cayenne.version>3.0.2</dependency.cayenne.version>
+		<dependency.cayenne.version>3.1</dependency.cayenne.version>
 	</properties>
 	
 	<dependencies>
@@ -54,14 +54,14 @@
 		<repository>
 			<id>nexus</id>
 			<name>VAMDC Releases</name>
-			<url>http://dev.vamdc.org/nexus/content/repositories/releases</url>
+			<url>http://nexus.vamdc.org/nexus/content/repositories/releases</url>
 		</repository>
 		
 		<!-- Publish snapshots here -->
 		<snapshotRepository>
 			<id>nexus</id>
 			<name>VAMDC Snapshot releases</name>
-			<url>http://dev.vamdc.org/nexus/content/repositories/snapshots</url>
+			<url>http://nexus.vamdc.org/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 
