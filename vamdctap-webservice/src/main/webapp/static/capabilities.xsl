@@ -48,6 +48,14 @@
 		</p>
 
 	</xsl:template>
+	
+    <xsl:template match="application">
+		<p>
+			Application/Processor
+			<xsl:value-of select="." />
+		</p>
+
+	</xsl:template>
 
 	<xsl:template match="interface">
 		<h3>Interface</h3>

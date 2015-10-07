@@ -2,8 +2,8 @@ package org.vamdc.tapservice;
 
 
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -22,23 +22,14 @@ import org.vamdc.xml.vamdc_tap.v1.VamdcTap;
 public class VOSICapabilities {
 	public static Capabilities get(){
 
-		final String baseurl = Setting.baseurls.getValue();
-
-		Collection<String> baseurls = new ArrayList<String>(){private static final long serialVersionUID = 9120067172144791872L;{
-			for (String base:baseurl.split("#")){
-				try {
-					@SuppressWarnings("unused")
-					URL service = new URL(base);
-					add(base);
-				} catch (MalformedURLException e) {}
-			}
-		}};
-
-
 		Capabilities returned = new Capabilities();
-		VamdcTap mycap = null;
-		mycap = (VamdcTap) createCapability(new VamdcTap(),"ivo://vamdc/std/VAMDC-TAP",
-				baseurls,"/TAP/");
+		Collection<String> baseURLs=splitURLs(Setting.baseurls.getValue(),"#");
+		
+		VamdcTap mycap = (VamdcTap) createCapability(
+				new VamdcTap(),
+				"ivo://vamdc/std/VAMDC-TAP",
+				baseURLs,
+				"/TAP/");
 
 		//Publish restrictables
 		for (Restrictable rest:DBPlugTalker.getRestrictables())
@@ -52,10 +43,14 @@ public class VOSICapabilities {
 					mycap.getReturnable().add(kword);
 			}
 
-		//Publish software versions
-		
+		//Publish software versions		
 		mycap.setVersionOfSoftware(new Versions().getSWVer());
 		mycap.setVersionOfStandards(new Versions().getStdVer());
+		
+		//Publish processors (applications)
+		mycap.getApplication().addAll(
+				splitURLs(Setting.processors.getValue(),"#")
+				);
 
 		//Publish sample queries
 		String queries = Setting.test_queries.getValue();
@@ -69,10 +64,10 @@ public class VOSICapabilities {
 
 		returned.getCapability().add(
 				createCapability(new Capability(),"ivo://ivoa.net/std/VOSI#capabilities",
-						baseurls,"/VOSI/capabilities"));
+						baseURLs,"/VOSI/capabilities"));
 		returned.getCapability().add(
 				createCapability(new Capability(),"ivo://ivoa.net/std/VOSI#availability",
-						baseurls,"/VOSI/availability"));
+						baseURLs,"/VOSI/availability"));
 
 		return returned;
 	};
@@ -103,6 +98,23 @@ public class VOSICapabilities {
 			
 		}
 		
+	}
+	
+	private static Collection<String> splitURLs(final String listString,final String splitter){
+		Collection<String> urls = new ArrayList<String>(){
+				private static final long serialVersionUID = 9120067172144791872L;
+				{
+					for (String base:listString.split(splitter)){
+						try {
+							URI service = new URI(base);
+							add(service.toString());
+						}catch (URISyntaxException e){
+							
+						}
+					}
+				}
+			};
+		return urls;
 	}
 
 }

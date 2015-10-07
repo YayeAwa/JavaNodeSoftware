@@ -21,6 +21,7 @@ public enum Setting {
 	class_plugin("database_plug_class","org.vamdc.database.tap.OutputBuilder"),
 	test_queries("test_queries","select species where atomsymbol like '%';select * where inchikey='UGFAIRIUMAVXCW-UHFFFAOYSA-N'"),
 	returnables("returnables","keyword1;keyword2;..."),
+	processors("processors","ivo://vamdc/processor_1#ivo://vamdc/processor2")
 	
 	;
 	
