@@ -19,6 +19,10 @@
 	<filter>
 		<filter-name>cayenne-project</filter-name>
 		<filter-class>org.apache.cayenne.configuration.web.CayenneFilter</filter-class>
+		<init-param>
+			<param-name>configuration-location</param-name>
+			<param-value>cayenne-project.xml</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>cayenne-project</filter-name>
@@ -65,8 +69,4 @@
 		<filter-name>jerseyFilter</filter-name>
 		<url-pattern>/clear_cache</url-pattern>
 	</filter-mapping>
-	<context-param>
-		<param-name>cayenne.configuration.path</param-name>
-		<param-value>/WEB-INF/config/cayenne</param-value>
-	</context-param>
 </web-app>
