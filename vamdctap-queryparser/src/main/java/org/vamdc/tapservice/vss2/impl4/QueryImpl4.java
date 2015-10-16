@@ -105,7 +105,7 @@ public class QueryImpl4 extends VSS2ParseListener implements Query {
 		parser = new VSS2Parser(tokens);
 
 		parser.removeErrorListeners();
-		parser.addErrorListener(new ExceptionErrorListener());
+		parser.addErrorListener(new ExceptionErrorListener(this.debug));
 		
 		ParseTree tree = parser.parse();
 		if (this.debug) System.out.println(tree.toStringTree(parser));

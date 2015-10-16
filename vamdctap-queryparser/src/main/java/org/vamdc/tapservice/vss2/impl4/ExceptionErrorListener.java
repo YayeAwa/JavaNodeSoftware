@@ -10,6 +10,16 @@ import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 
 public class ExceptionErrorListener extends BaseErrorListener {
+	private boolean debug=false;
+	
+	ExceptionErrorListener(){
+		
+	}
+	
+	ExceptionErrorListener(boolean debug){
+		this.debug=debug;
+	}
+	
 	@Override
 	public void syntaxError(Recognizer<?, ?> recognizer,
 							Object offendingSymbol,
@@ -30,7 +40,7 @@ public class ExceptionErrorListener extends BaseErrorListener {
 								BitSet ambigAlts,
 								ATNConfigSet configs)
 	{
-		throw new IllegalArgumentException();
+		if (debug) System.out.println("ambiguity between "+startIndex+" and "+stopIndex);
 	}
 
 	@Override
@@ -41,7 +51,7 @@ public class ExceptionErrorListener extends BaseErrorListener {
 											BitSet conflictingAlts,
 											ATNConfigSet configs)
 	{
-		throw new IllegalArgumentException();
+		if (debug) System.out.println("FullContext between "+startIndex+" and "+stopIndex);
 	}
 
 	@Override
@@ -52,7 +62,7 @@ public class ExceptionErrorListener extends BaseErrorListener {
 										 int prediction,
 										 ATNConfigSet configs)
 	{
-		throw new IllegalArgumentException();
+		if (debug) System.out.println("ContextSens between "+startIndex+" and "+stopIndex);
 	}
 	
 
