@@ -14,15 +14,15 @@ import org.vamdc.tapservice.vss2.impl4.QueryImpl4;
 public class VSSParser {
 
 	public static Query parse(String query){
-		return new QueryImpl(query);
+		return new QueryImpl4(query);
 	}
 	
 	public static Query parse(String query,Collection<Restrictable> filter){
-		return new QueryImpl(query,filter);
+		return new QueryImpl4(query,filter);
 	}
 	
 	static Query parseDebug(String query,Collection<Restrictable> filter){
-		return new QueryImpl(query,filter,true);
+		return new QueryImpl4(query,filter,true);
 		
 	}
 	
