@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.vamdc.dictionary.Restrictable;
 import org.vamdc.tapservice.vss2.impl.QueryImpl;
+import org.vamdc.tapservice.vss2.impl4.QueryImpl4;
 
 /**
  * Factory class for VSSParser library
