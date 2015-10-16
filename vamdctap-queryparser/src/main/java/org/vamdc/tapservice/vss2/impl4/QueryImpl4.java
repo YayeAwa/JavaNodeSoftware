@@ -102,10 +102,13 @@ public class QueryImpl4 extends VSS2ParseListener implements Query {
 		VSS2Lexer lexer = new VSS2Lexer(inputCharStream);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-		VSS2Parser parser = new VSS2Parser(tokens);
+		parser = new VSS2Parser(tokens);
 
+		parser.removeErrorListeners();
+		parser.addErrorListener(new ExceptionErrorListener());
+		
 		ParseTree tree = parser.parse();
-		System.out.println(tree.toStringTree(parser));
+		if (this.debug) System.out.println(tree.toStringTree(parser));
 		return tree;
 	}
 

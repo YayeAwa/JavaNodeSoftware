@@ -1,35 +1,19 @@
 package org.vamdc.tapservice.vss2;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.util.EnumSet;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.vamdc.dictionary.Restrictable;
 
 public class InvalidQueryTest{
 
-	@Rule
-	public ExpectedException exception = ExpectedException.none();
-
-	@Before
-	/**
-	 * Setup expected exception
-	 */
-	public void expectException(){
-		exception.expect(IllegalArgumentException.class);
-	}
-
-
 	/**
 	 * Test to reveal a null-pointer exception on invalid query
 	 */
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void testNullColumn(){
 		String query="select * where (inchikey = 'keyword' qwerty or inchikey='blah')";
 
@@ -39,7 +23,7 @@ public class InvalidQueryTest{
 	/**
 	 * Test to reveal IllegalArgumentException on unsupported keyword in the query.
 	 */
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void testParseQueryWithFilterException(){
 		String query = "Select * where atomSymbol='Fe' and inchikey='random'";
 
@@ -48,14 +32,15 @@ public class InvalidQueryTest{
 		fail();
 	}
 
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void testParseTypoElectQuery(){
 		String query = "elect * where atomSymbol='Fe'";
 
-		parseAndFail(query);
+		VSSParser.parse(query);
+		fail();
 	}
 
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void testParseTypoWehreQuery(){
 		String query = "select * wehre atomSymbol='Fe'";
 
@@ -64,35 +49,34 @@ public class InvalidQueryTest{
 	}
 
 	
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void testNonSenseQuery(){
 		String query = "select * where";
 		
 		parseAndFail(query);
 	}
 	
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void testSelectWrongRequestable(){
 		String query = "select something where";
 		parseAndFail(query);
 	}
 	
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void testParseQueryWithMissingBrace(){
 		String query="select * where (inchikey = 'keyword' or inchikey='blah'";
 
 		parseAndFail(query);
 	}
 
-	@Test
-	@Ignore
+	@Test(expected=IllegalArgumentException.class)
 	public void testParseQueryWithExtraBrace(){
 		String query="select * where (inchikey = 'keyword' or inchikey='blah'))";
 		
 		parseAndFail(query);
 	}
 	
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void testParseExtraAnd(){
 		String query="select * where (RadTransWavelength >= 5000000.0 AND RadTransWavelength <= 6000000.0) AND ((MoleculeChemicalName = 'Ethene' AND MoleculeStoichiometricFormula = 'C2H4' AND ))";
 		parseAndFail(query);
