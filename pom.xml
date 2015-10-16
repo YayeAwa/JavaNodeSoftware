@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.vamdc.tap</groupId>
 	<artifactId>vamdctap-parent</artifactId>
-	<version>12.07r1</version>
+	<version>12.07r2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<name>Parent project for Java VAMDC-TAP node software</name>
@@ -38,13 +38,14 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<dependency.cayenne.version>3.1</dependency.cayenne.version>
+		<dependency.junit.version>4.12</dependency.junit.version>
 	</properties>
 	
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.10</version>
+			<version>${dependency.junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
