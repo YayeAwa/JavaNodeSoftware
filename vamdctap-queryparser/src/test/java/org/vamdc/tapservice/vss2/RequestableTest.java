@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.vamdc.dictionary.Requestable;
 
-public class SimpleTest {
+public class RequestableTest {
 
 
     /**
@@ -19,6 +19,18 @@ public class SimpleTest {
         for (Requestable req: Requestable.values())
         	assertTrue( qp.checkSelectBranch(req));
     }
+	
+	/**
+     * Test if we can select something unknown
+     */
+	@Test(expected=IllegalArgumentException.class)
+    public void testSelectUnknown(){
+    	String query = "Select unknown";
+    	Query qp = VSSParser.parse(query);
+    	
+    	assertTrue(qp.checkSelectBranch(Requestable.Atoms));
+    }
+	
 	
 	 /**
      * Test the checkSelectBranch
@@ -59,7 +71,18 @@ public class SimpleTest {
     	assertFalse(qp.checkSelectBranch(Requestable.Collisions));
     }
     
-    
+    /**
+     * Test if Select Species works for all species
+     */
+	@Test
+    public void testSelectSpecies(){
+    	String query = "Select species";
+    	Query qp = VSSParser.parse(query);
+    	assertTrue(qp.checkSelectBranch(Requestable.Atoms));
+    	assertFalse(qp.checkSelectBranch(Requestable.States));
+    	assertTrue(qp.checkSelectBranch(Requestable.Molecules));
+    	assertFalse(qp.checkSelectBranch(Requestable.Collisions));
+    }
     
     /**
      * Test if we can keep query inside QueryParser
