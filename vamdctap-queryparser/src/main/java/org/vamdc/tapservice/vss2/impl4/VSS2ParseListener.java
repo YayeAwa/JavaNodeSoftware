@@ -16,6 +16,7 @@ import org.vamdc.tapservice.vsssqlparser.VSS2BaseListener;
 import org.vamdc.tapservice.vsssqlparser.VSS2Lexer;
 import org.vamdc.tapservice.vsssqlparser.VSS2Parser;
 import org.vamdc.tapservice.vsssqlparser.VSS2Parser.ExprContext;
+import org.vamdc.tapservice.vsssqlparser.VSS2Parser.Table_nameContext;
 
 
 /**
@@ -89,6 +90,9 @@ class VSS2ParseListener extends VSS2BaseListener{
 			
 		}
 		if (ctx.getChildCount()==1){
+			if (ctx instanceof Table_nameContext){
+				String prefix=(String)reParseTree(ctx.getChild(0));
+			}
 			return reParseTree(ctx.getChild(0));
 		}
 		return null;
@@ -104,14 +108,14 @@ class VSS2ParseListener extends VSS2BaseListener{
 		}else if (RestrictExpression4.supportsOperation(ctt)){
 			System.out.println("ctre("+ct.getText()+")");
 			return RestrictExpression4.ExprMap.get(ctt);
-		}else if (ctt==VSS2Lexer.STRING_LITERAL){
+		}else if (ctt==VSS2Lexer.STRING_LITERAL||ctt==VSS2Lexer.IDENTIFIER){
 			return ct.getText().replace("'", "").replace("\"", "");
 		}else if (ctt==VSS2Lexer.INTEGER_LITERAL){
 			return Integer.valueOf(ct.getText());
 		}else if (ctt==VSS2Lexer.FLOAT_LITERAL){
 			return Double.valueOf(ct.getText());
-		}else if (ctt==VSS2Lexer.IDENTIFIER){
-			return Restrictable.valueOfIgnoreCase(ct.getText());
+		//}else if (ctt==VSS2Lexer.IDENTIFIER){
+		//	return Restrictable.valueOfIgnoreCase(ct.getText());
 		}else{
 			System.out.println("Nothing to return!"+ctx.toStringTree(parser));
 			return null;
