@@ -47,13 +47,80 @@ class VSS2ParseListener extends VSS2BaseListener{
 	
 	
 	@Override public void enterSelect_where(VSS2Parser.Select_whereContext ctx) {
-		this.logicTree = parseTree(ctx.getChild(0));
+		this.logicTree = verifyTree(ctx.getChild(0));
+		System.out.println((this.logicTree!=null) ?this.logicTree : "null");
 		//System.out.println(" "+ctx.getRuleIndex()+" "+ctx.getChildCount()+ctx.getText());
 		//System.out.println(ctx.toStringTree());
 	}
 	
-	private LogicNode parseTree(ParseTree ctx) {
+	private LogicNode verifyTree(ParseTree ctx){
+		Object result = reParseTree(ctx);
+		System.out.println(result.getClass().toString());
+		if (result instanceof LogicNode)
+			return (LogicNode) result;
+		return null;
+	}
+	
+	private Object reParseTree(ParseTree ctx){
+		
 		System.out.println("cc"+ctx.getChildCount()+" plc "+ctx.getPayload().getClass()+" nc "+ctx.getClass());
+	
+		if (ctx!=null && ctx.getPayload() instanceof CommonToken)
+		{
+			return processLeaves(ctx);
+		}
+		if (ctx.getChildCount()>1){
+			ArrayList<Object> children = new ArrayList<Object>();
+			for (int i=0;i<ctx.getChildCount();i++){
+				children.add(reParseTree(ctx.getChild(i)));
+			}
+			for (Object child:children){
+				if (child instanceof Restrictable){
+					RestrictExpression re = new RestrictExpression4(children);
+					this.restrictsList.add(re);
+					System.out.println(re);
+					return re;
+				}else if (Operator.AND.equals(child)||Operator.OR.equals(child)||Operator.NOT.equals(child)){
+					LogicNode ln = new LogicNode4(children);
+					System.out.println(ln);
+					return ln;
+				}
+			}
+			
+		}
+		if (ctx.getChildCount()==1){
+			return reParseTree(ctx.getChild(0));
+		}
+		return null;
+	}
+
+	private Object processLeaves(ParseTree ctx) {
+		CommonToken ct = (CommonToken)ctx.getPayload();
+		int ctt=ct.getType();
+		System.out.println("type"+ctt);
+		if (ctt==VSS2Lexer.K_OR || ctt==VSS2Lexer.K_AND || ctt==VSS2Lexer.K_NOT){
+			System.out.println("ctln("+ct.getText()+")");
+			return Operator.valueOf(ct.getText().toUpperCase());
+		}else if (RestrictExpression4.supportsOperation(ctt)){
+			System.out.println("ctre("+ct.getText()+")");
+			return RestrictExpression4.ExprMap.get(ctt);
+		}else if (ctt==VSS2Lexer.STRING_LITERAL){
+			return ct.getText().replace("'", "").replace("\"", "");
+		}else if (ctt==VSS2Lexer.INTEGER_LITERAL){
+			return Integer.valueOf(ct.getText());
+		}else if (ctt==VSS2Lexer.FLOAT_LITERAL){
+			return Double.valueOf(ct.getText());
+		}else if (ctt==VSS2Lexer.IDENTIFIER){
+			return Restrictable.valueOfIgnoreCase(ct.getText());
+		}else{
+			System.out.println("Nothing to return!"+ctx.toStringTree(parser));
+			return null;
+		}
+			
+	}
+	
+	private LogicNode parseTree(ParseTree ctx) {
+		//System.out.println("cc"+ctx.getChildCount()+" plc "+ctx.getPayload().getClass()+" nc "+ctx.getClass());
 		if (ctx!=null && ctx.getPayload() instanceof CommonToken)
 		{
 			CommonToken ct = (CommonToken)ctx.getPayload();
@@ -75,14 +142,15 @@ class VSS2ParseListener extends VSS2BaseListener{
 					LogicNode res=parseTree(ctx.getChild(i));
 					
 					if (res instanceof LogicNodeImpl){
-						return res;
+						System.out.println("Logic node!"+res);
+						//return res;
 					}
 					if (res!=null){
 						children.add(res);
-						System.out.println("exprcontext children "+res.getClass());
+						System.out.println("exprcontext children "+res);
 					}
 				}
-				if (children.size()==1)
+				if (children.size()>=1)
 					return children.get(0);
 				System.out.println("return null 1");
 				return null;
@@ -149,9 +217,15 @@ class VSS2ParseListener extends VSS2BaseListener{
 			if (child!=ctx){
 				if (this.debug) System.out.println("child "+i+" "+child.getPayload().getClass());
 				LogicNode newChild = parseTree(child);
-				//if (this.debug && newChild!=null)
-				System.out.println("newchild "+newChild);
-				thisnode.addChild(newChild);
+				if (newChild!=null){
+					//if (this.debug && newChild!=null)
+					System.out.println("newchild "+newChild);
+					if (newChild instanceof LogicNodeImpl && newChild.getOperator()==thisnode.getOperator())
+						for (LogicNode subchild:((LogicNodeImpl)newChild).getValues())
+							thisnode.addChild(subchild);
+					else
+						thisnode.addChild(newChild);
+				}
 			}
 		}
 		
@@ -161,7 +235,8 @@ class VSS2ParseListener extends VSS2BaseListener{
 			return thisnode;
 		else if (childCount==1)
 			return thisnode.getValues().iterator().next();
-		else return null;
+		System.out.println("return null 3");
+		return null;
 	}
 
 

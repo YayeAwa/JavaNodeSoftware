@@ -1,5 +1,6 @@
 package org.vamdc.tapservice.vss2.impl4;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeMap;
 import java.util.Map;
@@ -9,7 +10,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.vamdc.dictionary.Restrictable;
 import org.vamdc.tapservice.vss2.BaseRestrictExpression;
-import org.vamdc.tapservice.vss2.LogicNode.Operator;
 import org.vamdc.tapservice.vsssqlparser.VSS2Lexer;
 
 public class RestrictExpression4 extends BaseRestrictExpression{
@@ -36,18 +36,43 @@ public class RestrictExpression4 extends BaseRestrictExpression{
 						}
 						if (filter==null || filter.contains(keyword)){
 							this.keyword = keyword;
+							if (i>0)
+								this.operator=inverseOperator(this.operator);
 						}else{
 							throw new IllegalArgumentException("Keyword "+keyword+" is valid but is restricted by filter.");
 						}
-					}else if (ctl.getType()==VSS2Lexer.STRING_LITERAL||ctl.getType()==VSS2Lexer.NUMERIC_LITERAL){
-						this.values.add(ctl.getText());
-						//"STRING_LITERAL","INTEGER_LITERAL","FLOAT_LITERAL"
+					}else if (ctl.getType()==VSS2Lexer.STRING_LITERAL){
+						this.values.add(ctl.getText().replace("'", "").replace("\"", ""));
+					}else if (ctl.getType()==VSS2Lexer.INTEGER_LITERAL){
+						this.values.add(Integer.valueOf(ctl.getText()));
+					}else if (ctl.getType()==VSS2Lexer.FLOAT_LITERAL){
+						this.values.add(Double.valueOf(ctl.getText()));
 					}			
 				}
 			}
 		}
-		System.out.println("RE4"+this.keyword+"("+this.operator+")"+ctx.getClass()+parent.getClass());
+		System.out.println("RE4"+this);
+		//System.out.println("RE4"+this.keyword+"("+this.operator+")"+ctx.getClass()+parent.getClass());
 		
+	}
+
+	public RestrictExpression4(ArrayList<Object> children) {
+		for (Object child:children){
+			if (child instanceof Operator){
+				this.operator=(Operator) child;
+			}
+		}
+		for (int i=0;i<children.size();i++){
+			Object child = children.get(i); 
+			if (child instanceof Restrictable){
+				this.keyword=(Restrictable) child;
+				if (i>0)
+					this.operator=inverseOperator(this.operator);
+			}else if (child instanceof String || child instanceof Double || child instanceof Integer){
+				this.values.add(child);
+			}	
+		}
+		System.out.println(this);
 	}
 
 	private TerminalNodeImpl findKeyword(ParseTree tree){
@@ -69,7 +94,10 @@ public class RestrictExpression4 extends BaseRestrictExpression{
 	 * Map between string operator definition and Operator id's
 	 * here is all we currently support for restricts comparison.
 	 */
-	private static Map<Integer, Operator> ExprMap = new TreeMap<Integer,Operator>(){{
+	 static Map<Integer, Operator> ExprMap = new TreeMap<Integer,Operator>(){
+		private static final long serialVersionUID = -1239582483152716476L;
+
+	{
 		put(VSS2Lexer.EQ,Operator.EQUAL_TO);
 		put(VSS2Lexer.ASSIGN,Operator.EQUAL_TO);
 		put(VSS2Lexer.NOT_EQ1,Operator.NOT_EQUAL_TO);

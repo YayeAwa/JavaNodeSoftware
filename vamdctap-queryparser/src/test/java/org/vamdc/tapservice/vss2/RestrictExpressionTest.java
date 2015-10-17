@@ -19,7 +19,7 @@ public class RestrictExpressionTest{
     	String query = "select * where InchiKey = 'stringval' AND atomMass=10 AND ioncharge=10.5";
     	Collection<Restrictable> filter = EnumSet.of(Restrictable.InchiKey, Restrictable.AtomMass,Restrictable.IonCharge);
     	
-    	Query qp = VSSParser.parse(query, filter);
+    	Query qp = VSSParser.parseDebug(query, filter);
     	assertTrue(qp.getQuery().equals(query));
     	assertFalse(qp.getQuery().equals("notaquery"));
     	assertEquals(qp.getRestrictsList().size(),3);
@@ -34,7 +34,7 @@ public class RestrictExpressionTest{
 	@Test
     public void testRestrictsSwap(){
     	String query = "select * where InchiKey>=10 AND 10<=InchiKey AND 10>InchiKey";
-    	Query qp = VSSParser.parse(query);
+    	Query qp = VSSParser.parseDebug(query);
     	assertTrue(qp.getRestrictsList().get(0).getOperator().equals(Operator.GREATER_THAN_EQUAL_TO));
     	assertTrue(qp.getRestrictsList().get(1).getOperator().equals(Operator.GREATER_THAN_EQUAL_TO));
     	assertTrue(qp.getRestrictsList().get(2).getOperator().equals(Operator.LESS_THAN));

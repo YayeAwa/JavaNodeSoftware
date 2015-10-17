@@ -110,19 +110,12 @@ select_core
 select_where
  : expr 
  ;
- 
-signed_number
- : ( '+' | '-' )? NUMERIC_LITERAL
- ;
+
 
 literal_value
- : NUMERIC_LITERAL
- | STRING_LITERAL
- | BLOB_LITERAL
- | K_NULL
- | K_CURRENT_TIME
- | K_CURRENT_DATE
- | K_CURRENT_TIMESTAMP
+ : integer_literal
+ | float_literal
+ | string_literal
  ;
 
 unary_operator
@@ -459,14 +452,30 @@ IDENTIFIER
  | [a-zA-Z_] [a-zA-Z_0-9]* // TODO check: needs more chars in set
  ;
 
-NUMERIC_LITERAL
- : DIGIT+ ( '.' DIGIT* )? ( E [-+]? DIGIT+ )?
- | '.' DIGIT+ ( E [-+]? DIGIT+ )?
+integer_literal
+ : INTEGER_LITERAL
+ ;
+ 
+INTEGER_LITERAL
+ : [+|-]? DIGIT+
+ ;
+
+float_literal
+ : FLOAT_LITERAL
+ ;
+ 
+FLOAT_LITERAL
+ : [+|-]? DIGIT+ ( '.' DIGIT* )? ( E [+|-]? DIGIT+ )?
+ | '.' DIGIT+ ( E [+|-]? DIGIT+ )?
  ;
 
 BIND_PARAMETER
  : '?' DIGIT*
  | [:@$] IDENTIFIER
+ ;
+
+string_literal
+ : STRING_LITERAL
  ;
 
 STRING_LITERAL

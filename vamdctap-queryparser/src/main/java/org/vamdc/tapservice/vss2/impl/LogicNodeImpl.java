@@ -12,13 +12,14 @@ import org.vamdc.tapservice.vss2.LogicNode;
  */
 public class LogicNodeImpl implements LogicNode{
 
-	private ArrayList<LogicNode> children;
+	private ArrayList<LogicNode> children = new ArrayList<LogicNode>();
 	private Operator operator;
 	
 	public LogicNodeImpl(Operator operation){
-		children = new ArrayList<LogicNode>();
 		operator=operation;
-		
+	}
+	
+	public LogicNodeImpl(){
 	}
 	
 	public void addChild(LogicNode node){
@@ -52,6 +53,10 @@ public class LogicNodeImpl implements LogicNode{
 	@Override
 	public Operator getOperator() {
 		return operator;
+	}
+	
+	protected void setOperator(Operator op){
+		this.operator=op;
 	}
 
 	@Override
