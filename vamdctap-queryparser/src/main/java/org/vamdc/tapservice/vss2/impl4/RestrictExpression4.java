@@ -6,7 +6,6 @@ import java.util.TreeMap;
 
 import org.vamdc.dictionary.Restrictable;
 import org.vamdc.tapservice.vss2.BaseRestrictExpression;
-import org.vamdc.tapservice.vss2.LogicNode.Operator;
 import org.vamdc.tapservice.vsssqlparser.VSS2Lexer;
 
 public class RestrictExpression4 extends BaseRestrictExpression{
@@ -32,7 +31,6 @@ public class RestrictExpression4 extends BaseRestrictExpression{
 			Object child = children.get(i); 
 			if (child instanceof String || child instanceof Double || child instanceof Integer){
 				this.values.add(child);
-				break;
 			}
 			if (child instanceof Restrictable){
 				this.keyword=(Restrictable) child;

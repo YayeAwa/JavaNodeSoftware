@@ -55,7 +55,7 @@ public class QueryImpl4 extends VSS2ParseListener implements Query {
 		//We should be OK by now.
 		prefixes = new PrefixHandler4(this.restrictsList);
 		System.out.println("rls"+this.restrictsList.size());
-		//if (debug)
+		if (debug && this.getRestrictsTree()!=null)
 			System.out.println(this.getRestrictsTree().toString());
 	}
 	

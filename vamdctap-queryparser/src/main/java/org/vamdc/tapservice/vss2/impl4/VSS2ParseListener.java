@@ -10,18 +10,15 @@ import org.vamdc.dictionary.Restrictable;
 import org.vamdc.tapservice.vss2.LogicNode;
 import org.vamdc.tapservice.vss2.RestrictExpression;
 import org.vamdc.tapservice.vss2.LogicNode.Operator;
-import org.vamdc.tapservice.vss2.impl.LogicNodeImpl;
-import org.vamdc.tapservice.vss2.impl.PrefixHandler;
 import org.vamdc.tapservice.vsssqlparser.VSS2BaseListener;
 import org.vamdc.tapservice.vsssqlparser.VSS2Lexer;
 import org.vamdc.tapservice.vsssqlparser.VSS2Parser;
 import org.vamdc.tapservice.vsssqlparser.VSS2Parser.Column_nameContext;
-import org.vamdc.tapservice.vsssqlparser.VSS2Parser.ExprContext;
 import org.vamdc.tapservice.vsssqlparser.VSS2Parser.Table_nameContext;
 
 
 /**
- * Listener extension implementing the logic of VSS2 query parsing.
+ * Listener extension implementing the walker of the VSS2 tree.
  * @author doronin
  *
  */
@@ -95,12 +92,12 @@ class VSS2ParseListener extends VSS2BaseListener{
 					//Build a normal RestrictExpression here
 					RestrictExpression re = new RestrictExpression4(children);
 					this.restrictsList.add(re);
-					System.out.println(re);
+					System.out.println("re"+re);
 					return re;
 				}else if (Operator.AND.equals(child)||Operator.OR.equals(child)||Operator.NOT.equals(child)){
 					//Here we are at the logicnode (AND|OR|NOT) level
 					LogicNode ln = new LogicNode4(children);
-					System.out.println(ln);
+					System.out.println("ln"+ln);
 					return ln;
 				}else if (child instanceof internalOps && internalOps.dot.equals(child)){
 					//Looks like a restrictable with prefixes
@@ -118,11 +115,12 @@ class VSS2ParseListener extends VSS2BaseListener{
 				Restrictable ret = Restrictable.valueOfIgnoreCase((String)reParseTree(ctx.getChild(0)));
 				if (this.allowedRestrictables==null
 						|| this.allowedRestrictables.size()==0
-						|| this.allowedRestrictables.contains(ret))
+						|| this.allowedRestrictables.contains(ret)){
+					System.out.println("restr"+ret);
 					return ret;
-				else
+				}else{
 					throw new IllegalArgumentException("The keyword "+ret.toString()+" is not in the list of allowed keywords");
-					
+				}
 			}
 			return reParseTree(ctx.getChild(0));
 		}
