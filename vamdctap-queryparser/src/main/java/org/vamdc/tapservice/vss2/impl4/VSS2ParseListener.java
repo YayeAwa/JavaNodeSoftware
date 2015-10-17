@@ -109,7 +109,14 @@ class VSS2ParseListener extends VSS2BaseListener{
 			if (ctx instanceof Table_nameContext){
 				return (String)reParseTree(ctx.getChild(0));
 			}else if (ctx instanceof Column_nameContext){
-				return Restrictable.valueOfIgnoreCase((String)reParseTree(ctx.getChild(0)));
+				Restrictable ret = Restrictable.valueOfIgnoreCase((String)reParseTree(ctx.getChild(0)));
+				if (this.allowedRestrictables==null
+						|| this.allowedRestrictables.size()==0
+						|| this.allowedRestrictables.contains(ret))
+					return ret;
+				else
+					throw new IllegalArgumentException("The keyword "+ret.toString()+" is not in the list of allowed keywords");
+					
 			}
 			return reParseTree(ctx.getChild(0));
 		}
