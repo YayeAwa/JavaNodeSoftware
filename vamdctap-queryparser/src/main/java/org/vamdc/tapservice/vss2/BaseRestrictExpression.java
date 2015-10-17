@@ -2,7 +2,6 @@ package org.vamdc.tapservice.vss2;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.vamdc.dictionary.Restrictable;
 
@@ -25,7 +24,10 @@ public class BaseRestrictExpression implements RestrictExpression{
 
 	@Override
 	public String getColumnName() {
-		return keyword.name();
+		if (this.keyword!=null)
+			return keyword.name();
+		else 
+			return "";
 	}
 
 	@Override
@@ -73,29 +75,33 @@ public class BaseRestrictExpression implements RestrictExpression{
 
 	@Override
 	public String toString() {
-		String result="";
+		StringBuilder result=new StringBuilder();
 		if (getPrefix()!=null)
-			result=getPrefix()+".";
-		result+=getColumnName();
+			result.append(getPrefix()).append(".");
+		else if (getPrefixStr()!=null)
+			result.append(getPrefixStr()).append(":");
+			
+		result.append(getColumnName());
 		
-		result=result.concat(" "+getOperator().toString()+" ");
+		if (this.getOperator()!=null)
+			result.append(" ").append(getOperator().toString()).append(" ");
 		
 		if (getValues().size()>1)
-			result=result.concat("(");
-		Iterator<Object> iter = getValues().iterator();
-		while (iter.hasNext()){
-			Object restrict=iter.next();
+			result.append("(");
+		
+		for (Object restrict:getValues()){
 			if (restrict instanceof String)
-				result=result.concat("'"+restrict+"'");
+				result.append("'").append(restrict).append("'");
 			else
-				result=result.concat(restrict.toString());
-			if (iter.hasNext())
-				result=result.concat(",");
+				result.append(restrict.toString());
+			result.append(",");
 		}
+		if (getValues().size()>0)
+			result.deleteCharAt(result.length()-1);//Delete the last comma of a series
 		if (getValues().size()>1)
-			result=result.concat(")");
+			result.append(")");
 	
-		return result;
+		return result.toString();
 	}
 
 }
