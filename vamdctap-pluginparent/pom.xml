@@ -5,7 +5,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	<parent>
 		<groupId>org.vamdc.tap</groupId>
 		<artifactId>vamdctap-parent</artifactId>
-		<version>12.07r1</version>
+		<version>12.07r2-SNAPSHOT</version>
 	</parent>
 	
 	<artifactId>vamdctap-plugin</artifactId>

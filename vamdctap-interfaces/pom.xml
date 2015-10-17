@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.vamdc.tap</groupId>
 		<artifactId>vamdctap-parent</artifactId>
-		<version>12.07r1</version>
+		<version>12.07r2-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	
@@ -32,7 +32,7 @@
 		<dependency>
 			<groupId>org.vamdc.xml</groupId>
 			<artifactId>xsams-extra</artifactId>
-			<version>12.07</version>
+			<version>12.07r2-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>org.vamdc</groupId>
 			<artifactId>Dictionaries</artifactId>
-			<version>12.07</version>
+			<version>12.07r2-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
