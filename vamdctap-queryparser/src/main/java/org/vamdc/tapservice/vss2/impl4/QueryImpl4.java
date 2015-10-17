@@ -19,7 +19,6 @@ import org.vamdc.tapservice.vss2.NodeFilter;
 import org.vamdc.tapservice.vss2.Prefix;
 import org.vamdc.tapservice.vss2.Query;
 import org.vamdc.tapservice.vss2.RestrictExpression;
-import org.vamdc.tapservice.vss2.impl.PrefixHandler;
 import org.vamdc.tapservice.vsssqlparser.VSS2Lexer;
 import org.vamdc.tapservice.vsssqlparser.VSS2Parser;
 

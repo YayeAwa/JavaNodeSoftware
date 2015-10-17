@@ -82,6 +82,12 @@ class VSS2ParseListener extends VSS2BaseListener{
 			for (int i=0;i<ctx.getChildCount();i++){
 				children.add(reParseTree(ctx.getChild(i)));
 			}
+			
+			//Extra braces workaround
+			if (children.size()==3 && internalOps.lbrace == children.get(0)&& internalOps.rbrace==children.get(2))
+				return children.get(1);
+			
+			
 			for (Object child:children){
 				if (child instanceof Restrictable || 
 						(child instanceof Operator
@@ -141,6 +147,10 @@ class VSS2ParseListener extends VSS2BaseListener{
 			return Double.valueOf(ct.getText());
 		}else if (ctt==VSS2Lexer.DOT){
 			return internalOps.dot;
+		}else if (ctt==VSS2Lexer.OPEN_PAR){
+			return internalOps.lbrace;
+		}else if (ctt==VSS2Lexer.CLOSE_PAR){
+			return internalOps.rbrace;
 		}else{
 			System.out.println("Nothing to return!"+ctx.toStringTree(parser));
 			return null;
