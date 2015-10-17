@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.vamdc.dictionary.Restrictable;
 import org.vamdc.tapservice.vss2.LogicNode.Operator;
-import org.vamdc.tapservice.vss2.impl.LogicNodeImpl;
 
 /**
  * Collection of static methods for LogicNode filtering
@@ -29,7 +28,7 @@ public class NodeFilter {
 				return node;
 			return null;
 		}else if (node.getValues()!=null && node.getValues().size()>0){
-			LogicNodeImpl newNode = new LogicNodeImpl(node.getOperator());//Create new node
+			LogicNodeBaseImpl newNode = new LogicNodeBaseImpl(node.getOperator());//Create new node
 			for (Object child:node.getValues()){//Check all child nodes
 				LogicNode filtered=filterPrefix((LogicNode)child,filter);
 				if (filtered!=null)//Add child nodes if they passed filtering
@@ -60,7 +59,7 @@ public class NodeFilter {
 				return node; 
 			return null;
 		}else if (node.getValues()!=null && node.getValues().size()>0){
-			LogicNodeImpl newNode = new LogicNodeImpl(node.getOperator());//Create new node
+			LogicNodeBaseImpl newNode = new LogicNodeBaseImpl(node.getOperator());//Create new node
 			for (Object child:node.getValues()){//Check all child nodes
 				LogicNode filtered=filterKeywords((LogicNode)child,filter);
 				if (filtered!=null)//Add child nodes if they passed filtering

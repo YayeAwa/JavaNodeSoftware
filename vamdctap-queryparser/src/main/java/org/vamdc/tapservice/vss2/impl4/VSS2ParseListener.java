@@ -53,22 +53,22 @@ class VSS2ParseListener extends VSS2BaseListener{
 	
 	@Override public void enterSelect_where(VSS2Parser.Select_whereContext ctx) {
 		this.logicTree = verifyTree(ctx.getChild(0));
-		System.out.println((this.logicTree!=null) ?this.logicTree : "null");
-		//System.out.println(" "+ctx.getRuleIndex()+" "+ctx.getChildCount()+ctx.getText());
-		//System.out.println(ctx.toStringTree());
+		if (this.debug)
+			System.out.println((this.logicTree!=null) ?this.logicTree : "null");
 	}
 	
 	private LogicNode verifyTree(ParseTree ctx){
 		Object result = reParseTree(ctx);
-		System.out.println(result.getClass().toString());
+		if (this.debug)
+			System.out.println(result.getClass().toString());
 		if (result instanceof LogicNode)
 			return (LogicNode) result;
 		return null;
 	}
 	
 	private Object reParseTree(ParseTree ctx){
-		
-		System.out.println("cc"+ctx.getChildCount()+" plc "+ctx.getPayload().getClass()+" nc "+ctx.getClass());
+		if (this.debug)
+			System.out.println("cc"+ctx.getChildCount()+" plc "+ctx.getPayload().getClass()+" nc "+ctx.getClass());
 	
 		if (ctx!=null && ctx.getPayload() instanceof CommonToken)
 		{
@@ -92,17 +92,20 @@ class VSS2ParseListener extends VSS2BaseListener{
 					//Build a normal RestrictExpression here
 					RestrictExpression re = new RestrictExpression4(children);
 					this.restrictsList.add(re);
-					System.out.println("re"+re);
+					if (this.debug)
+						System.out.println("re"+re);
 					return re;
 				}else if (Operator.AND.equals(child)||Operator.OR.equals(child)||Operator.NOT.equals(child)){
 					//Here we are at the logicnode (AND|OR|NOT) level
 					LogicNode ln = new LogicNode4(children);
-					System.out.println("ln"+ln);
+					if (this.debug)
+						System.out.println("ln"+ln);
 					return ln;
 				}else if (child instanceof internalOps && internalOps.dot.equals(child)){
 					//Looks like a restrictable with prefixes
 					RestrictExpression re = new RestrictExpression4(children,true);
-					System.out.println("prefixed "+re);
+					if (this.debug)
+						System.out.println("prefixed "+re);
 					return re;
 				}
 			}
@@ -116,7 +119,8 @@ class VSS2ParseListener extends VSS2BaseListener{
 				if (this.allowedRestrictables==null
 						|| this.allowedRestrictables.size()==0
 						|| this.allowedRestrictables.contains(ret)){
-					System.out.println("restr"+ret);
+					if (this.debug)
+						System.out.println("restr"+ret);
 					return ret;
 				}else{
 					throw new IllegalArgumentException("The keyword "+ret.toString()+" is not in the list of allowed keywords");
@@ -130,12 +134,15 @@ class VSS2ParseListener extends VSS2BaseListener{
 	private Object processLeaves(ParseTree ctx) {
 		CommonToken ct = (CommonToken)ctx.getPayload();
 		int ctt=ct.getType();
-		System.out.println("type"+ctt);
+		if (this.debug)
+			System.out.println("type"+ctt);
 		if (ctt==VSS2Lexer.K_OR || ctt==VSS2Lexer.K_AND || ctt==VSS2Lexer.K_NOT){
-			System.out.println("ctln("+ct.getText()+")");
+			if (this.debug)
+				System.out.println("ctln("+ct.getText()+")");
 			return Operator.valueOf(ct.getText().toUpperCase());
 		}else if (RestrictExpression4.supportsOperation(ctt)){
-			System.out.println("ctre("+ct.getText()+")");
+			if (this.debug)
+				System.out.println("ctre("+ct.getText()+")");
 			return RestrictExpression4.ExprMap.get(ctt);
 		}else if (ctt==VSS2Lexer.STRING_LITERAL||ctt==VSS2Lexer.IDENTIFIER){
 			return ct.getText().replace("'", "").replace("\"", "");
@@ -150,16 +157,10 @@ class VSS2ParseListener extends VSS2BaseListener{
 		}else if (ctt==VSS2Lexer.CLOSE_PAR){
 			return internalOps.rbrace;
 		}else{
-			System.out.println("Nothing to return!"+ctx.toStringTree(parser));
-			return null;
+			throw new IllegalArgumentException("Unknown parser node in the query"+this.query+" at node "+ctx.toStringTree(parser));
 		}
 			
 	}
-	
-	
-
-
-	
 
 
 	/**

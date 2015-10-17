@@ -1,40 +1,30 @@
-package org.vamdc.tapservice.vss2.impl;
+package org.vamdc.tapservice.vss2;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.vamdc.tapservice.vss2.LogicNode;
 
 
 /**
  * Simple class to keep query restricts logic tree structure
  * @author doronin
  */
-public class LogicNodeImpl implements LogicNode{
+public class LogicNodeBaseImpl implements LogicNode{
 
 	private ArrayList<LogicNode> children = new ArrayList<LogicNode>();
 	private Operator operator;
 	
-	public LogicNodeImpl(Operator operation){
+	public LogicNodeBaseImpl(Operator operation){
 		operator=operation;
 	}
 	
-	public LogicNodeImpl(){
+	public LogicNodeBaseImpl(){
 	}
 	
 	public void addChild(LogicNode node){
 		children.add(node);
 	}
 	
-	
-	
-	
-
-
-	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString(){
 		String result="(";

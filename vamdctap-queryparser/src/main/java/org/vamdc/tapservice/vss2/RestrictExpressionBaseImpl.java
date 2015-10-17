@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.vamdc.dictionary.Restrictable;
 
-public class BaseRestrictExpression implements RestrictExpression{
+public class RestrictExpressionBaseImpl implements RestrictExpression{
 
 	protected Prefix columnPrefix;
 	protected String prefixStr;
@@ -13,7 +13,7 @@ public class BaseRestrictExpression implements RestrictExpression{
 	protected Operator operator;
 	protected Collection<Object> values=new ArrayList<Object>();
 	
-	public BaseRestrictExpression() {
+	public RestrictExpressionBaseImpl() {
 		super();
 	}
 

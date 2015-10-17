@@ -5,10 +5,10 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.vamdc.dictionary.Restrictable;
-import org.vamdc.tapservice.vss2.BaseRestrictExpression;
+import org.vamdc.tapservice.vss2.RestrictExpressionBaseImpl;
 import org.vamdc.tapservice.vsssqlparser.VSS2Lexer;
 
-public class RestrictExpression4 extends BaseRestrictExpression{
+public class RestrictExpression4 extends RestrictExpressionBaseImpl{
 
 	public RestrictExpression4(ArrayList<Object> children,boolean mode){
 		//Special mode to fill in only the prefix and restrictable
