@@ -3,13 +3,11 @@ package org.vamdc.tapservice.vss2.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.antlr.runtime.tree.CommonTree;
 import org.vamdc.dictionary.Restrictable;
-import org.vamdc.tapservice.vss2.Prefix;
-import org.vamdc.tapservice.vss2.RestrictExpression;
+import org.vamdc.tapservice.vss2.BaseRestrictExpression;
 import org.vamdc.tapservice.vsssqlparser.CommonTreeDumper;
 
 /**
@@ -19,50 +17,7 @@ import org.vamdc.tapservice.vsssqlparser.CommonTreeDumper;
  *
  */
 @SuppressWarnings("serial")
-public class RestrictExpressionImpl implements RestrictExpression {
-
-	private Prefix columnPrefix;
-	private String prefixStr;
-	private Restrictable keyword;
-	private Operator operator;
-	private Collection<Object> values;
-	
-	@Override
-	public Restrictable getColumn() {
-		return keyword;
-	}
-
-	@Override
-	public String getColumnName() {
-		return keyword.name();
-	}
-
-	@Override
-	public Operator getOperator() {
-		return operator;
-	}
-
-	@Override
-	public Prefix getPrefix() {
-		return columnPrefix;
-	}
-
-	@Override
-	public Object getValue() {
-		if (values!=null && values.size()>0)
-			return values.iterator().next();
-		return null;
-	}
-
-	@Override
-	public Collection<Object> getValues() {
-		return values;
-	}
-
-	@Override
-	public boolean isValid() {
-		return keyword!=null && operator!=null && !values.isEmpty();
-	}
+public class RestrictExpressionImpl extends BaseRestrictExpression{
 	
 	/**
 	 * Default constructor accepts and parses subtree with expression information.
@@ -95,27 +50,10 @@ public class RestrictExpressionImpl implements RestrictExpression {
 		if (CommonTreeTools.checkInverse(expressionBranch))
 			operator = inverseOperator(operator);
 
-		values = new ArrayList<Object>();
 		for (CommonTree value:CommonTreeTools.findObjects(expressionBranch)){
 			values.add(getObjectValue(value));
 		}
 
-	}
-	
-	/**
-	 * Get prefix string
-	 * @return prefix string as it was in the query
-	 */
-	public String getPrefixStr(){
-		return prefixStr;
-	}
-	
-	/**
-	 * Set prefix structure
-	 * @param prefix structure with the keyword from the dictionary and an index.
-	 */
-	public void setPrefix(Prefix prefix){
-		this.columnPrefix = prefix;
 	}
 	
 	/**
@@ -170,33 +108,6 @@ public class RestrictExpressionImpl implements RestrictExpression {
 			return Double.parseDouble(mytree.getChild(0).getText());
 		}
 		return null;
-	}
-	
-	@Override
-	public String toString(){
-		String result="";
-		if (getPrefix()!=null)
-			result=getPrefix()+".";
-		result+=getColumnName();
-		
-		result=result.concat(" "+getOperator().toString()+" ");
-		
-		if (getValues().size()>1)
-			result=result.concat("(");
-		Iterator<Object> iter = getValues().iterator();
-		while (iter.hasNext()){
-			Object restrict=iter.next();
-			if (restrict instanceof String)
-				result=result.concat("'"+restrict+"'");
-			else
-				result=result.concat(restrict.toString());
-			if (iter.hasNext())
-				result=result.concat(",");
-		}
-		if (getValues().size()>1)
-			result=result.concat(")");
-
-		return result;
 	}
 	
 }

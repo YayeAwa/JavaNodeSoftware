@@ -24,8 +24,6 @@ import org.vamdc.tapservice.vsssqlparser.VSS2Parser;
 
 public class QueryImpl4 extends VSS2ParseListener implements Query {
 
-	private String query = "";
-
 	public QueryImpl4(String query) {
 		this.query = query;
 		parse(query);

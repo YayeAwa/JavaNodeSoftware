@@ -21,6 +21,10 @@ public class VSSParser {
 		return new QueryImpl4(query,filter);
 	}
 	
+	public static Query parseDebug(String query){
+		return new QueryImpl4(query,null,true);
+	}
+	
 	static Query parseDebug(String query,Collection<Restrictable> filter){
 		return new QueryImpl4(query,filter,true);
 		

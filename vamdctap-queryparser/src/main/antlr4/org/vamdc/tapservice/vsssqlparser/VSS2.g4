@@ -103,10 +103,14 @@ result_column
 
 select_core
  : K_SELECT ( K_DISTINCT | K_ALL )? result_column ( ',' result_column )*
-   ( K_WHERE expr )?
+   ( K_WHERE select_where )?
    ( K_GROUP K_BY expr ( ',' expr )* ( K_HAVING expr )? )?
  ;
 
+select_where
+ : expr 
+ ;
+ 
 signed_number
  : ( '+' | '-' )? NUMERIC_LITERAL
  ;
