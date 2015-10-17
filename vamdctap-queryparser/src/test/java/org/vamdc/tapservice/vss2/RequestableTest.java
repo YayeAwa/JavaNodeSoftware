@@ -83,6 +83,19 @@ public class RequestableTest {
     	assertTrue(qp.checkSelectBranch(Requestable.Molecules));
     	assertFalse(qp.checkSelectBranch(Requestable.Collisions));
     }
+	
+    /**
+     * Test if Select Species works for all species
+     */
+	@Test
+    public void testSelectSpeciesSC(){
+    	String query = "Select species;";
+    	Query qp = VSSParser.parseDebug(query);
+    	assertTrue(qp.checkSelectBranch(Requestable.Atoms));
+    	assertFalse(qp.checkSelectBranch(Requestable.States));
+    	assertTrue(qp.checkSelectBranch(Requestable.Molecules));
+    	assertFalse(qp.checkSelectBranch(Requestable.Collisions));
+    }
     
     /**
      * Test if we can keep query inside QueryParser
