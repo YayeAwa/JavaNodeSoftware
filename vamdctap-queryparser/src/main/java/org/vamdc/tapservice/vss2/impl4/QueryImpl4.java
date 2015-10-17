@@ -19,6 +19,7 @@ import org.vamdc.tapservice.vss2.NodeFilter;
 import org.vamdc.tapservice.vss2.Prefix;
 import org.vamdc.tapservice.vss2.Query;
 import org.vamdc.tapservice.vss2.RestrictExpression;
+import org.vamdc.tapservice.vss2.impl.PrefixHandler;
 import org.vamdc.tapservice.vsssqlparser.VSS2Lexer;
 import org.vamdc.tapservice.vsssqlparser.VSS2Parser;
 
@@ -53,6 +54,10 @@ public class QueryImpl4 extends VSS2ParseListener implements Query {
 		//All the variables are initialized while walking the tree
 		walker.walk(this, tree);
 		//We should be OK by now.
+		prefixes = new PrefixHandler4(this.restrictsList);
+		System.out.println("rls"+this.restrictsList.size());
+		//if (debug)
+			System.out.println(this.getRestrictsTree().toString());
 	}
 	
 

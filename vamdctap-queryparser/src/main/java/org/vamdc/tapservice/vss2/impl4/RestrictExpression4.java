@@ -1,61 +1,27 @@
 package org.vamdc.tapservice.vss2.impl4;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.TreeMap;
 import java.util.Map;
+import java.util.TreeMap;
 
-import org.antlr.v4.runtime.CommonToken;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.vamdc.dictionary.Restrictable;
 import org.vamdc.tapservice.vss2.BaseRestrictExpression;
+import org.vamdc.tapservice.vss2.LogicNode.Operator;
 import org.vamdc.tapservice.vsssqlparser.VSS2Lexer;
 
 public class RestrictExpression4 extends BaseRestrictExpression{
-	
-	public RestrictExpression4(ParseTree ctx,Collection<Restrictable> filter) {
-		CommonToken ct = (CommonToken)ctx.getPayload();
-		this.operator=ExprMap.get(ct.getType());
-		
-		ParseTree parent = ctx.getParent();
-		
-		for (int i=0;i<parent.getChildCount();i++){
-			ParseTree child = parent.getChild(i);
-			if (child!=ctx){
-				TerminalNodeImpl tn = findKeyword(child);
-				if (tn.getPayload() instanceof CommonToken){
-					CommonToken ctl = (CommonToken)tn.getPayload();
-					if (ctl.getType()==VSS2Lexer.IDENTIFIER){
-						String columnName=ctl.getText();
-						Restrictable keyword=null;
-						try{
-							 keyword = Restrictable.valueOfIgnoreCase(columnName);
-						}catch (IllegalArgumentException e){
-							throw new IllegalArgumentException("Keyword "+columnName+" is not present in the dictionary.");
-						}
-						if (filter==null || filter.contains(keyword)){
-							this.keyword = keyword;
-							if (i>0)
-								this.operator=inverseOperator(this.operator);
-						}else{
-							throw new IllegalArgumentException("Keyword "+keyword+" is valid but is restricted by filter.");
-						}
-					}else if (ctl.getType()==VSS2Lexer.STRING_LITERAL){
-						this.values.add(ctl.getText().replace("'", "").replace("\"", ""));
-					}else if (ctl.getType()==VSS2Lexer.INTEGER_LITERAL){
-						this.values.add(Integer.valueOf(ctl.getText()));
-					}else if (ctl.getType()==VSS2Lexer.FLOAT_LITERAL){
-						this.values.add(Double.valueOf(ctl.getText()));
-					}			
-				}
+
+	public RestrictExpression4(ArrayList<Object> children,boolean mode){
+		//Special mode to fill in only the prefix and restrictable
+		for (Object child:children){
+			if (child instanceof String){
+				this.prefixStr=(String) child;
+			}else if (child instanceof Restrictable){
+				this.keyword=(Restrictable)child;
 			}
 		}
-		System.out.println("RE4"+this);
-		//System.out.println("RE4"+this.keyword+"("+this.operator+")"+ctx.getClass()+parent.getClass());
-		
 	}
-
+	
 	public RestrictExpression4(ArrayList<Object> children) {
 		for (Object child:children){
 			if (child instanceof Operator){
@@ -64,31 +30,32 @@ public class RestrictExpression4 extends BaseRestrictExpression{
 		}
 		for (int i=0;i<children.size();i++){
 			Object child = children.get(i); 
+			if (child instanceof String || child instanceof Double || child instanceof Integer){
+				this.values.add(child);
+				break;
+			}
 			if (child instanceof Restrictable){
 				this.keyword=(Restrictable) child;
 				if (i>0)
 					this.operator=inverseOperator(this.operator);
-			}else if (child instanceof String || child instanceof Double || child instanceof Integer){
-				this.values.add(child);
-			}	
+			}
+			if (child instanceof RestrictExpression4){
+				//We got a prefixed Restrictable as a child, in fact.
+				this.keyword=((RestrictExpression4) child).getColumn();
+				this.prefixStr=((RestrictExpression4) child).getPrefixStr();
+				if (i>0)
+					this.operator=inverseOperator(this.operator);
+			}
 		}
 		System.out.println(this);
 	}
 
-	private TerminalNodeImpl findKeyword(ParseTree tree){
-		if (tree.getChildCount()>1)
-			throw  new IllegalArgumentException("Too many child nodes in the tree "+tree.toStringTree());
-		
-		if(!(tree instanceof TerminalNodeImpl) && tree.getChildCount()>0)
-			return findKeyword(tree.getChild(0));
-		else if (tree instanceof TerminalNodeImpl)
-			return (TerminalNodeImpl)tree;
-		return null;
-	}
 	
 	public static boolean supportsOperation(Integer key){
 		return ExprMap.containsKey(key);
 	}
+	
+	public 
 	
 	/**
 	 * Map between string operator definition and Operator id's
@@ -132,5 +99,9 @@ public class RestrictExpression4 extends BaseRestrictExpression{
 		default:
 			return initial;
 		}
+	}
+
+	public static boolean supportsOperatior(Operator child) {
+		return ExprMap.containsValue(child);
 	}
 }
