@@ -24,7 +24,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
- * Project      : sqlite-parser; an ANTLR4 grammar for SQLite
+ * VAMDC VSS2 parser, 
+ * derived from the Project : sqlite-parser; an ANTLR4 grammar for SQLite
  *                https://github.com/bkiers/sqlite-parser
  * Developed by : Bart Kiers, bart@big-o.nl
  */
@@ -479,7 +480,7 @@ string_literal
 
 STRING_LITERAL
  : '"' (~'"' | '""')* '"'
- | '\'' ( ~'\'' | '\'\'' )* '\''
+ | '\'' ( '\\\'' |  ~'\''  | '\'\'' )* '\''
  ;
 
 BLOB_LITERAL

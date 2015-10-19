@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.vamdc.dictionary.Restrictable;
 import org.vamdc.tapservice.vss2.LogicNode.Operator;
@@ -13,7 +14,7 @@ public class RestrictExpressionTest{
 	
 	@Test
 	public void testInlineDoubleQuotes(){
-		String val="stringval\"";
+		String val="stringval\"\"";
 		String query = "select * where InchiKey = '"+val+"'";
 		Query qp = VSSParser.parse(query);
 		assertEquals(qp.getRestrictsTree().getValue(),val);
@@ -31,12 +32,31 @@ public class RestrictExpressionTest{
 	
 	@Test
 	public void testInlineSingleQuote(){
-		String val="stringval\\\'";
+		String val="stringval''";
 		String query = "select * where InchiKey = '"+val+"'";
 		Query qp = VSSParser.parse(query);
 		assertEquals(qp.getRestrictsTree().getValue(),val);
 		assertTrue(qp.getRestrictsTree().isValid());
 	}
+	
+	@Test
+	@Ignore //Use double single quotes '' instead
+	public void testInlineScreenedSingleQuote(){
+		String val="stringval\'";
+		String query = "select * where InchiKey = '"+val+"'";
+		Query qp = VSSParser.parse(query);
+		assertEquals(qp.getRestrictsTree().getValue(),val);
+		assertTrue(qp.getRestrictsTree().isValid());
+	}
+	@Test
+	public void testInlineScreenedDoubleQuotes(){
+		String val="stringval\\\"";
+		String query = "select * where InchiKey = '"+val+"'";
+		Query qp = VSSParser.parse(query);
+		assertEquals(qp.getRestrictsTree().getValue(),val);
+		assertTrue(qp.getRestrictsTree().isValid());
+	}
+    
     /**
      * Test if variable's data types are recognized correctly
      */

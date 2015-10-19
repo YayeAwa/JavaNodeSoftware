@@ -100,9 +100,12 @@ class VSS2ParseListener extends VSS2BaseListener{
 		}else if (RestrictExpression4.supportsOperation(ctt)){
 			logger.trace("leaf ({})",ct.getText());
 			return RestrictExpression4.ExprMap.get(ctt);
-		}else if (ctt==VSS2Lexer.STRING_LITERAL||ctt==VSS2Lexer.IDENTIFIER){
-			logger.trace("String {}",ct.getText());
-			return ct.getText().replace("'", "").replace("\"", "");
+		}else if (ctt==VSS2Lexer.STRING_LITERAL){
+			String val=ct.getText();
+			logger.trace("String {}",val);
+			return val.substring(1,val.length()-1);//Quoted string, omit the surrounding quotes, keep those inside the value
+		}else if (ctt==VSS2Lexer.IDENTIFIER){
+			return ct.getText();//Identifier, return as-is
 		}else if (ctt==VSS2Lexer.INTEGER_LITERAL){
 			logger.trace("Integer {}",ct.getText());
 			return Integer.valueOf(ct.getText());
