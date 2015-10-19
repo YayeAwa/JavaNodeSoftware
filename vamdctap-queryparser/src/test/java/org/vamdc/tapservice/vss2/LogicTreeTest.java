@@ -11,7 +11,7 @@ public class LogicTreeTest{
 	@Test
 	public void testTree(){
 		String query = "Select * where IonCharge=0 AND InChIKey like 'String%'";
-		Query qp = VSSParser.parseDebug(query);
+		Query qp = VSSParser.parse(query);
 		assertNotNull( qp.getRestrictsTree() );
 		assertEquals( qp.getRestrictsTree().getOperator(),Operator.AND);
 		for (Object node:qp.getRestrictsTree().getValues()){

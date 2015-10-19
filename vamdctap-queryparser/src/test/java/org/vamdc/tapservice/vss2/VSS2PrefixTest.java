@@ -44,7 +44,7 @@ public class VSS2PrefixTest{
 	@Test
 	public void testDoublePrefix(){
 		String query = "Select * where (reactant1.InchiKey=2 OR reactant1.atomMass=1) AND reactant2.InchiKey=0;";
-		Query qp = VSSParser.parseDebug(query);
+		Query qp = VSSParser.parse(query);
 
 		assertEquals(qp.getPrefixes().size(),2);
 		assertEquals(qp.getPrefixes().iterator().next().getPrefix(),VSSPrefix.REACTANT);

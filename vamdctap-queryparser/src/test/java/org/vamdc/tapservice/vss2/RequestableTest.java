@@ -15,7 +15,7 @@ public class RequestableTest {
     public void testCheckSelectBranchStar()
     {
     	String query = "Select * where AtomSymbol='Fe'";
-    	Query qp = VSSParser.parseDebug(query);
+    	Query qp = VSSParser.parse(query);
         for (Requestable req: Requestable.values())
         	assertTrue( qp.checkSelectBranch(req));
     }
@@ -26,7 +26,7 @@ public class RequestableTest {
 	@Test(expected=IllegalArgumentException.class)
     public void testSelectUnknown(){
     	String query = "Select unknown";
-    	Query qp = VSSParser.parseDebug(query);
+    	Query qp = VSSParser.parse(query);
     	
     	assertTrue(qp.checkSelectBranch(Requestable.Atoms));
     }
@@ -39,7 +39,7 @@ public class RequestableTest {
     public void testCheckSelectBranchAll()
     {
     	String query = "Select All where AtomSymbol='Fe'";
-    	Query qp = VSSParser.parseDebug(query);
+    	Query qp = VSSParser.parse(query);
         for (Requestable req: Requestable.values())
         	assertTrue( qp.checkSelectBranch(req));
     }
@@ -50,7 +50,7 @@ public class RequestableTest {
 	@Test
     public void testSelectColumns(){
     	String query = "Select molecules,atoms";
-    	Query qp = VSSParser.parseDebug(query);
+    	Query qp = VSSParser.parse(query);
     	
     	assertTrue(qp.checkSelectBranch(Requestable.Atoms));
     	assertFalse(qp.checkSelectBranch(Requestable.States));
@@ -64,7 +64,7 @@ public class RequestableTest {
 	@Test
     public void testSelectRecursiveColumns(){
     	String query = "Select states";
-    	Query qp = VSSParser.parseDebug(query);
+    	Query qp = VSSParser.parse(query);
     	assertTrue(qp.checkSelectBranch(Requestable.Atoms));
     	assertTrue(qp.checkSelectBranch(Requestable.States));
     	assertTrue(qp.checkSelectBranch(Requestable.Molecules));
@@ -77,7 +77,7 @@ public class RequestableTest {
 	@Test
     public void testSelectSpecies(){
     	String query = "Select species";
-    	Query qp = VSSParser.parseDebug(query);
+    	Query qp = VSSParser.parse(query);
     	assertTrue(qp.checkSelectBranch(Requestable.Atoms));
     	assertFalse(qp.checkSelectBranch(Requestable.States));
     	assertTrue(qp.checkSelectBranch(Requestable.Molecules));
@@ -90,7 +90,7 @@ public class RequestableTest {
 	@Test
     public void testSelectSpeciesSC(){
     	String query = "Select species;";
-    	Query qp = VSSParser.parseDebug(query);
+    	Query qp = VSSParser.parse(query);
     	assertTrue(qp.checkSelectBranch(Requestable.Atoms));
     	assertFalse(qp.checkSelectBranch(Requestable.States));
     	assertTrue(qp.checkSelectBranch(Requestable.Molecules));
@@ -103,7 +103,7 @@ public class RequestableTest {
 	@Test
     public void testStoredQuery(){
     	String query = "select * where Inchikey = 'stringval' AND atomMass=10 AND ioncharge=10.5";
-    	Query qp = VSSParser.parseDebug(query);
+    	Query qp = VSSParser.parse(query);
     	assertTrue(qp.getQuery().equals(query));
     	assertFalse(qp.getQuery().equals("notaquery"));
 	}
