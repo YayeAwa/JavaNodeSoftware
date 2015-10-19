@@ -1,6 +1,7 @@
 package org.vamdc.tapservice.vss2;
 
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.EnumSet;
@@ -10,6 +11,14 @@ import org.vamdc.dictionary.Restrictable;
 
 public class InvalidQueryTest{
 
+	@Test(expected=IllegalArgumentException.class)
+	public void testMixedQuotes(){
+		String query = "select * where InchiKey = 'stringval\"";
+		Query qp = VSSParser.parse(query);
+		
+		assertTrue(qp.getRestrictsTree().isValid());
+	}
+	
 	/**
 	 * Test to reveal a null-pointer exception on invalid query
 	 */
@@ -44,7 +53,7 @@ public class InvalidQueryTest{
 	public void testParseTypoWehreQuery(){
 		String query = "select * wehre atomSymbol='Fe'";
 
-		VSSParser.parseDebug(query, null);
+		VSSParser.parse(query, null);
 		parseAndFail(query);
 	}
 
