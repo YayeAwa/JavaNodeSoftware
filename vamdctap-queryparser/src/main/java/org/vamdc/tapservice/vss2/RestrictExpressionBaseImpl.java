@@ -3,8 +3,6 @@ package org.vamdc.tapservice.vss2;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.vamdc.dictionary.Restrictable;
 
 public class RestrictExpressionBaseImpl implements RestrictExpression{
