@@ -8,17 +8,17 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExceptionErrorListener extends BaseErrorListener {
-	private boolean debug=false;
+
+	final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	ExceptionErrorListener(){
 		
 	}
-	
-	ExceptionErrorListener(boolean debug){
-		this.debug=debug;
-	}
+
 	
 	@Override
 	public void syntaxError(Recognizer<?, ?> recognizer,
@@ -40,7 +40,7 @@ public class ExceptionErrorListener extends BaseErrorListener {
 								BitSet ambigAlts,
 								ATNConfigSet configs)
 	{
-		if (debug) System.out.println("ambiguity between "+startIndex+" and "+stopIndex);
+		logger.trace("ambiguity between {} and {} reported",startIndex,stopIndex);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class ExceptionErrorListener extends BaseErrorListener {
 											BitSet conflictingAlts,
 											ATNConfigSet configs)
 	{
-		if (debug) System.out.println("FullContext between "+startIndex+" and "+stopIndex);
+		logger.trace("FullContext between {} and {} reported",startIndex,stopIndex);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class ExceptionErrorListener extends BaseErrorListener {
 										 int prediction,
 										 ATNConfigSet configs)
 	{
-		if (debug) System.out.println("ContextSens between "+startIndex+" and "+stopIndex);
+		logger.trace("ContextSens between {} and {} reported",startIndex,stopIndex);
 	}
 	
 

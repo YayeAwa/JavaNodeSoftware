@@ -24,6 +24,8 @@ import org.vamdc.tapservice.vsssqlparser.VSS2Parser;
 
 public class QueryImpl4 extends VSS2ParseListener implements Query {
 
+	
+	
 	public QueryImpl4(String query) {
 		this.query = query;
 		parse(query);
@@ -41,7 +43,6 @@ public class QueryImpl4 extends VSS2ParseListener implements Query {
 	public QueryImpl4(String query, Collection<Restrictable> filter, boolean debug) {
 		this.query = query;
 		this.allowedRestrictables=filter;
-		this.debug=debug;
 		parse(query);
 	}
 
@@ -54,9 +55,6 @@ public class QueryImpl4 extends VSS2ParseListener implements Query {
 		walker.walk(this, tree);
 		//We should be OK by now.
 		prefixes = new PrefixHandler4(this.restrictsList);
-		System.out.println("rls"+this.restrictsList.size());
-		if (debug && this.getRestrictsTree()!=null)
-			System.out.println(this.getRestrictsTree().toString());
 	}
 	
 
@@ -107,10 +105,12 @@ public class QueryImpl4 extends VSS2ParseListener implements Query {
 		parser = new VSS2Parser(tokens);
 
 		parser.removeErrorListeners();
-		parser.addErrorListener(new ExceptionErrorListener(this.debug));
+		parser.addErrorListener(new ExceptionErrorListener());
 		
 		ParseTree tree = parser.parse();
-		if (this.debug) System.out.println(tree.toStringTree(parser));
+		if (logger.isDebugEnabled())
+			logger.debug("Parsed query tree {}",tree.toStringTree(parser));
+		
 		return tree;
 	}
 

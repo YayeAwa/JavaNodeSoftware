@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.vamdc.dictionary.Restrictable;
 import org.vamdc.tapservice.vss2.RestrictExpressionBaseImpl;
 import org.vamdc.tapservice.vsssqlparser.VSS2Lexer;
 
 public class RestrictExpression4 extends RestrictExpressionBaseImpl{
 
+	final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	public RestrictExpression4(ArrayList<Object> children,boolean mode){
-		//Special mode to fill in only the prefix and restrictable
+		//Special mode to fill in only the prefix and the restrictable keyword
 		for (Object child:children){
 			if (child instanceof String){
 				this.prefixStr=(String) child;
@@ -45,7 +49,7 @@ public class RestrictExpression4 extends RestrictExpressionBaseImpl{
 					this.operator=inverseOperator(this.operator);
 			}
 		}
-		System.out.println(this);
+		logger.debug("Initialized RestrictExpression {}",this);
 	}
 
 	

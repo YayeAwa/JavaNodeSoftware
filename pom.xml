@@ -39,6 +39,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<dependency.cayenne.version>3.1</dependency.cayenne.version>
 		<dependency.junit.version>4.12</dependency.junit.version>
+		<dependency.slf4j.version>1.7.12</dependency.slf4j.version>
 	</properties>
 	
 	<dependencies>
@@ -47,6 +48,11 @@
 			<artifactId>junit</artifactId>
 			<version>${dependency.junit.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${dependency.slf4j.version}</version>
 		</dependency>
 	</dependencies>
 	
