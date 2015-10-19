@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.EnumSet;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.vamdc.dictionary.Restrictable;
 
@@ -29,5 +30,26 @@ public class FactoryTest {
 		assertTrue(parsed.getRestrictsTree()!=null);
 		assertTrue(parsed.getRestrictsList().size()==2);
 	}
+	
+	@Test
+	@Ignore
+    public void speedTest(){
+    	long startTime = System.currentTimeMillis();
+    	long cumul=0;
+    	Integer myval=0;
+    	String query="";
+    	for (int i=0;i<1000;i++){
+    		query="select * where inchikey="+i+" and (atomsymbol='Ar' or ioncharge=100 or atomsymbol='Xe');";
+    		Query parsed=VSSParser.parse(query);
+    		
+    		myval=(Integer)((RestrictExpression)parsed.getRestrictsTree().getValue()).getValue();
+    		cumul+=myval;
+    		if (i!=myval)
+    			System.out.println("i!=myval at"+i);
+    	}
+    	long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        System.out.println( "Hello World! I have iterated "+(myval+1)+" times and summed up "+cumul+" taking "+elapsedTime+"ms "+"for queries like "+query);
+    }
 	
 }
