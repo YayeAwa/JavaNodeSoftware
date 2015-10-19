@@ -27,7 +27,7 @@ import org.vamdc.tapservice.vsssqlparser.VSS2Parser.Table_nameContext;
  */
 class VSS2ParseListener extends VSS2BaseListener{
 	
-	final Logger logger = LoggerFactory.getLogger(this.getClass());
+	final Logger logger = LoggerFactory.getLogger(VSS2ParseListener.class);
 
 	//The most dummy way of restricting - a dummy list of keywords
 	protected List<RestrictExpression> restrictsList = new ArrayList<RestrictExpression>();
@@ -54,7 +54,7 @@ class VSS2ParseListener extends VSS2BaseListener{
 	@Override public void enterSelect_where(VSS2Parser.Select_whereContext ctx) {
 		Object tree = parseWhereTree(ctx.getChild(0));
 		if (tree!=null){
-			logger.debug("Logic tree of the where part {}",(this.logicTree!=null) ?this.logicTree : "null");
+			logger.debug("Logic tree of the where part {}",(tree!=null)? tree : "null");
 			logger.trace("The root node class is {}",tree.getClass().toString());
 		}
 		if (tree instanceof LogicNode){
