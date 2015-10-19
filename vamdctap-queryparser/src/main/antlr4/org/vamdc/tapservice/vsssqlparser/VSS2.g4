@@ -446,8 +446,7 @@ K_WITH : W I T H;
 K_WITHOUT : W I T H O U T;
 
 IDENTIFIER
- : '"' (~'"' | '""')* '"'
- | '`' (~'`' | '``')* '`'
+ : '`' (~'`' | '``')* '`'
  | '[' ~']'* ']'
  | [a-zA-Z_] [a-zA-Z_0-9]* // TODO check: needs more chars in set
  ;
@@ -479,7 +478,8 @@ string_literal
  ;
 
 STRING_LITERAL
- : '\'' ( ~'\'' | '\'\'' )* '\''
+ : '"' (~'"' | '""')* '"'
+ | '\'' ( ~'\'' | '\'\'' )* '\''
  ;
 
 BLOB_LITERAL
