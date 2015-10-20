@@ -53,7 +53,7 @@ public class RequestProcess implements RequestInterface {
 		try {
 			parsedQuery = VSSParser.parse(query,restrictables);
 		} catch (IllegalArgumentException e) {
-			errors.add("Malformed query: " + e.getMessage());
+			errors.add("Malformed query (QUERY parameter): " + e.getMessage());
 		}
 
 		initRequest(XSAMSFactory.getXsamsManager(),
