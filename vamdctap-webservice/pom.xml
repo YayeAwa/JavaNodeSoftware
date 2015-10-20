@@ -10,7 +10,6 @@
 	</parent>
 
 	<artifactId>vamdctap-webservice</artifactId>
-	<version>12.07r2-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 
@@ -42,20 +41,13 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.18</version>
+			<version>5.1.37</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-servlet</artifactId>
-			<version>1.11</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>jsr311-api</artifactId>
-			<version>1.1.1</version>
-			<type>jar</type>
+			<version>1.19</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -67,14 +59,14 @@
 		<dependency>
 			<groupId>net.ivoa</groupId>
 			<artifactId>mappings</artifactId>
-			<version>12.07r2-SNAPSHOT</version>
+			<version>${project.parent.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.vamdc.xml</groupId>
 			<artifactId>xsams-io</artifactId>
-			<version>12.07r2-SNAPSHOT</version>
+			<version>${project.parent.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
