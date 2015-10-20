@@ -5,10 +5,10 @@ import org.vamdc.dictionary.Restrictable;
 import org.vamdc.tapservice.vss2.RestrictExpression;
 
 /**
- * Interface describing a keyword mapper between VSS2 queries
- * and internal database queries with apache cayenne.
- * Mapping of query to multiple root tables is supported, each root table 
- * is distinguished by own queryIndex
+ * Interface describing a Restrictable keyword mapper from VSS2 queries
+ * to internal database queries with apache cayenne.
+ * Mapping relative to multiple root tables is supported, each root table 
+ * is distinguished by a corresponding queryIndex
  *
  */
 public interface KeywordMapper {

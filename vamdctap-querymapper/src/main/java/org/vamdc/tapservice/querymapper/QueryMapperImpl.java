@@ -16,8 +16,9 @@ public class QueryMapperImpl implements QueryMapper{
 	private Map<Restrictable, KeywordMapper> mappers = new TreeMap<Restrictable,KeywordMapper>();
 	
 	@Override
-	public void addMapper(KeywordMapper mapper) {
+	public QueryMapper addKeywordMapper(KeywordMapper mapper) {
 		mappers.put(mapper.getKeyword(), mapper);
+		return this;
 	}
 
 	@Override

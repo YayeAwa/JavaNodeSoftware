@@ -7,8 +7,8 @@ import org.vamdc.dictionary.Restrictable;
 import org.vamdc.tapservice.vss2.LogicNode;
 
 /**
- * Interface describing advanced QueryMapper library.
- * This library provides support for keyword-specific mappers,
+ * Interface describing the advanced QueryMapper.
+ * It provides support for keyword-specific mappers (KeywordMapper interface),
  * enabling unit conversions, virtual keywords, etc.
  */
 public interface QueryMapper {
@@ -17,7 +17,7 @@ public interface QueryMapper {
 	 * Add new mapper to use
 	 * @param mapper KeywordMapper implementation
 	 */
-	public void addMapper(KeywordMapper mapper);
+	public QueryMapper addKeywordMapper(KeywordMapper mapper);
 	
 	/**
 	 * Get supported Restrictables
