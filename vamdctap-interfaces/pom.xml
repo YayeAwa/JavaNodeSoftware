@@ -23,13 +23,6 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.1</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.vamdc.xml</groupId>
 			<artifactId>xsams-extra</artifactId>
 			<version>12.07r2-SNAPSHOT</version>
