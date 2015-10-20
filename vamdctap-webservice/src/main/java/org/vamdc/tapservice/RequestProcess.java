@@ -34,9 +34,10 @@ public class RequestProcess implements RequestInterface {
 	private XSAMSManager xsamsroot;
 	private ObjectContext context;
 	private Query query;
+	private String queryString=""; 
 	public boolean valid;
 	private Date reqstart;
-	private Logger logger;
+	private Logger logger=LoggerFactory.getLogger(RequestProcess.class);;
 	private Date lastModified=null;
 
 	private Collection<String> errors = new ArrayList<String>();
@@ -48,6 +49,7 @@ public class RequestProcess implements RequestInterface {
 
 	public RequestProcess(String query, Collection<Restrictable> restrictables) {
 		Query parsedQuery = null;
+		this.queryString=query;
 		try {
 			parsedQuery = VSSParser.parse(query,restrictables);
 		} catch (IllegalArgumentException e) {
@@ -68,7 +70,6 @@ public class RequestProcess implements RequestInterface {
 			this.valid = (query.getRestrictsList().size() > 0) 
 			|| query.getQuery().trim().toLowerCase().startsWith("select species");
 
-		logger = LoggerFactory.getLogger(RequestProcess.class);
 		reqstart = new Date();
 
 	}
@@ -182,14 +183,20 @@ public class RequestProcess implements RequestInterface {
 
 	void finishRequest() {
 		// Called before sending data to the client, used for the logging purposes.
-		if (query != null && logger.isInfoEnabled());
-			logger.info("Request query {} processed in {}s",query.getQuery(),(new Double(new Date().getTime() - reqstart.getTime()))/1000.0);
-		if (query != null && logger.isDebugEnabled() && query.getRestrictsTree() != null) {
-			logger.debug("Tree string:{}" + query.getRestrictsTree().toString());
-			for (RestrictExpression re : query.getRestrictsList()) {
-				logger.debug("Query keyword: {}", re);
+		if (query != null){
+			if (logger.isInfoEnabled()){
+				logger.info("Request query {} processed in {}s",query.getQuery(),(new Double(new Date().getTime() - reqstart.getTime()))/1000.0);
 			}
+			if (logger.isDebugEnabled() && query.getRestrictsTree() != null) {
+				logger.debug("Tree string:{}" + query.getRestrictsTree().toString());
+				for (RestrictExpression re : query.getRestrictsList()) {
+					logger.debug("Query keyword: {}", re);
+				}
+			}
+		}else if (logger.isInfoEnabled()){
+				logger.info("Malformed query {}",this.queryString);
 		}
+		
 	}
 	
 	// Returns response with all headers set
