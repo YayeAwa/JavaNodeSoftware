@@ -16,18 +16,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.vamdc.dictionary.Restrictable;
 import org.vamdc.tapservice.RequestProcess;
-import org.vamdc.tapservice.vss2.impl.QueryImpl;
+import org.vamdc.tapservice.vss2.VSSParser;
 import org.vamdc.tapservice.api.RequestInterface;
 import org.vamdc.xsams.XSAMSFactory;
 
 /**
- * Availability monitor daemon
- * Checks periodically, is able return availability status
+ * Availability monitor daemon.
+ * Periodically checks the components of the node software,
+ * returns the error status if available. 
  * 
  * @author doronin
  *
  */
-//TODO: check error message on wrong DB class name
+//TODO: check the error message on the wrong DB class name
 public class AvailabilityMonitor implements Runnable{
 	
 	private static enum ErrorCode{ 
@@ -48,18 +49,18 @@ public class AvailabilityMonitor implements Runnable{
 		
 	}
 	
-	private GregorianCalendar upSince;
-	private GregorianCalendar backAt;
-	private GregorianCalendar downAt;
-	private ErrorCode lastState;
+	private GregorianCalendar upSince=new GregorianCalendar();
+	private GregorianCalendar backAt=null;
+	private GregorianCalendar downAt=null;
+	private ErrorCode lastState=ErrorCode.OK;
 	private DatatypeFactory factory;
 	
-	private Thread monitorThread;
-	private boolean running;
+	private Thread monitorThread=null;
+	private boolean keepRunning=true;
 	
 	private ObjectContext CayenneContext;
 	
-	private Logger logger;
+	private Logger logger = LoggerFactory.getLogger(AvailabilityMonitor.class);
 	
 	private static class MonitorHolder{
 		private final static AvailabilityMonitor stored=new AvailabilityMonitor();
@@ -73,33 +74,26 @@ public class AvailabilityMonitor implements Runnable{
 	 * Monitor constructor
 	 */
 	public AvailabilityMonitor(){
-		running=true;
-		upSince=new GregorianCalendar();
-		backAt=null;
-		downAt=null;
-		lastState=ErrorCode.OK;
-		monitorThread=null;
-		logger = LoggerFactory.getLogger("org.vamdc.tapservice");
-		logger.debug("Initializing "+this.getClass().toString());
+		logger.debug("Initializing");
 		try {
 			factory=DatatypeFactory.newInstance();
 		} catch (DatatypeConfigurationException e) {
-			logger.debug("Can't instantiaze datatype factory");
+			logger.debug("Can not instantiate the DatatypeFactory",e);
 		}
 
 	}
 	
 	@Override
 	public void run() {
-		logger.debug("In thread! :)");
+		logger.debug("The availability monitor thread had started.");
 		//Do self checks periodically
-		while (running){
+		while (keepRunning){
 			ErrorCode currentState=selfCheck(CayenneContext);
-			logger.debug("Montor self-check with status "+currentState);
+			logger.debug("Montor self-check status {}",currentState);
 			if (currentState!=lastState){
 				updateTimestamps(currentState,lastState);
+				lastState=currentState;
 			}
-			lastState=currentState;
 			
 			long sleeptime=1000L*Setting.selfcheck_interval.getInt();
 			try {
@@ -107,7 +101,7 @@ public class AvailabilityMonitor implements Runnable{
 			} catch (InterruptedException e) {
 			}
 		}
-		logger.debug("Monitor thread dying x[");
+		logger.debug("Monitor thread is dying x[");
 	}
 	
 	private void updateTimestamps(ErrorCode state, ErrorCode lastState) {
@@ -121,14 +115,17 @@ public class AvailabilityMonitor implements Runnable{
 	
 	private static void checkRunning(){
 		ObjectContext context=BaseContext.getThreadObjectContext();
-		AvailabilityMonitor mon = getMonitor();
-		if (mon.CayenneContext==null && context !=null)
-			mon.CayenneContext=context;
-		if (mon.monitorThread==null){
-			mon.monitorThread=new Thread(mon);
-			mon.monitorThread.start();
+		
+		AvailabilityMonitor monitor = getMonitor();
+		
+		if (monitor.CayenneContext==null && context !=null)
+			monitor.CayenneContext=context;
+		
+		if (monitor.monitorThread==null){
+			monitor.monitorThread=new Thread(monitor);
+			monitor.monitorThread.start();
 		}
-		mon.logger.debug("Thread "+mon.monitorThread.getId());
+		monitor.logger.debug("Started the monitor thread {}",monitor.monitorThread.getId());
 	}
 
 	private ErrorCode cayenneCheck(RequestInterface myrequest){
@@ -155,14 +152,14 @@ public class AvailabilityMonitor implements Runnable{
 	//Do a simple service self-check:
 	private ErrorCode selfCheck(ObjectContext context){
 		//Check service configuration
-		logger.debug("Check config");
+		logger.debug("Check the configuration");
 		if (!Setting.isConfigured()) return ErrorCode.CF_NONE;
 		
-		logger.debug("check plugin");
+		logger.debug("Check the node plugin");
 		if (!DBPlugTalker.checkPlugin())
 			return ErrorCode.PL_UNAVAIL;
 		
-		logger.debug("check restrictables");
+		logger.debug("Check the queryParser and restrictables");
 		//Check if plugin returns restrictables:
 		Collection<Restrictable> keywords = DBPlugTalker.getRestrictables();
 		String query = getTestQuery(keywords);
@@ -172,34 +169,31 @@ public class AvailabilityMonitor implements Runnable{
 		RequestInterface myrequest = new RequestProcess(
 				XSAMSFactory.getXsamsManager(),
 				context,
-				new QueryImpl(query, null));
-		//Check if we parsed query:
-		if (myrequest.getRestricts().size()!=keywords.size()) return ErrorCode.QP_BROKEN;
-		logger.debug("check cayenne");
+				VSSParser.parse(query));
+		//Check if we parsed the query:
+		if (myrequest.getQueryKeywords().size()!=keywords.size()) return ErrorCode.QP_BROKEN;
+		logger.debug("Check the Apache Cayenne");
 		ErrorCode cayenneStatus = cayenneCheck( myrequest);
-		logger.debug("done!");
 		if (cayenneStatus != ErrorCode.OK) return cayenneStatus;
-		
-
-		
 		return ErrorCode.OK;
 	}
 	
 	/**
-	 * Generate test query out of array of restrictables:
-	 * @param restrictables array of allowed column names
-	 * @return query string with all column names present
+	 * Generate test query out of the collection of restrictables:
+	 * @param restrictables supported
+	 * @return query string with all the Restrictables present
 	 */
 	private static String getTestQuery(Collection<Restrictable> restrictables){
-		String query = "select * where ";
+		StringBuilder query = new StringBuilder();
+		query.append("select * where ");
 		int i=0;
 		for (Restrictable keyword:restrictables){
-			query = query.concat(keyword.name()+" = "+(i++)+" ");
+			query.append(keyword.name()).append(" = ").append((i++)).append(" ");
 			if (i<restrictables.size()){
-				query = query.concat(" AND ");
+				query.append(" AND ");
 			}
 		}
-		return query;
+		return query.toString();
 	}
 	
 	public static boolean getServiceStatus(){
@@ -214,27 +208,27 @@ public class AvailabilityMonitor implements Runnable{
 
 	public static XMLGregorianCalendar getUpSince() {
 		checkRunning();
-		AvailabilityMonitor mon = getMonitor();
-		if (mon.upSince==null || mon.factory==null) return null;
-		return mon.factory.newXMLGregorianCalendar(mon.upSince);
+		AvailabilityMonitor monitor = getMonitor();
+		if (monitor.upSince==null || monitor.factory==null) return null;
+		return monitor.factory.newXMLGregorianCalendar(monitor.upSince);
 	}
 
 	public static XMLGregorianCalendar getBackAt() {
 		checkRunning();
-		AvailabilityMonitor mon = getMonitor();
-		if (mon.backAt==null || mon.factory==null) return null;
-		return mon.factory.newXMLGregorianCalendar(mon.backAt);
+		AvailabilityMonitor monitor = getMonitor();
+		if (monitor.backAt==null || monitor.factory==null) return null;
+		return monitor.factory.newXMLGregorianCalendar(monitor.backAt);
 	}
 
 	public static XMLGregorianCalendar getDownAt() {
 		checkRunning();
-		AvailabilityMonitor mon = getMonitor();
-		if (mon.downAt==null || mon.factory==null) return null;
-		return mon.factory.newXMLGregorianCalendar(mon.downAt);
+		AvailabilityMonitor monitor = getMonitor();
+		if (monitor.downAt==null || monitor.factory==null) return null;
+		return monitor.factory.newXMLGregorianCalendar(monitor.downAt);
 	}
 	
 	public static void shutDown(){
-		getMonitor().running=false;
+		getMonitor().keepRunning=false;
 	}
 
 }

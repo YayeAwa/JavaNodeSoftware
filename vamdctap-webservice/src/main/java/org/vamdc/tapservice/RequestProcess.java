@@ -3,7 +3,6 @@ package org.vamdc.tapservice;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
@@ -69,7 +68,7 @@ public class RequestProcess implements RequestInterface {
 			this.valid = (query.getRestrictsList().size() > 0) 
 			|| query.getQuery().trim().toLowerCase().startsWith("select species");
 
-		logger = LoggerFactory.getLogger("org.vamdc.tapservice");
+		logger = LoggerFactory.getLogger(RequestProcess.class);
 		reqstart = new Date();
 
 	}
@@ -86,16 +85,17 @@ public class RequestProcess implements RequestInterface {
 		return context;
 	}
 
+	
 	@Override
-	public List<RestrictExpression> getRestricts() {
+	public Collection<RestrictExpression> getQueryKeywords() {
 		return query.getRestrictsList();
 	}
 
 	@Override
-	public LogicNode getRestrictsTree() {
+	public LogicNode getQueryTree() {
 		return query.getRestrictsTree();
 	}
-
+	
 	@Override
 	public boolean checkBranch(Requestable branch) {
 		return query.checkSelectBranch(branch);
@@ -111,13 +111,6 @@ public class RequestProcess implements RequestInterface {
 		return query.getQuery();
 	}
 
-	@Override
-	public Logger getLogger(Class<?> className) {
-		if (className == null)
-			return logger;
-		return LoggerFactory.getLogger(className);
-	}
-	
 	@Override
 	public Query getQuery() {
 		return query;
@@ -188,16 +181,13 @@ public class RequestProcess implements RequestInterface {
 	}
 
 	void finishRequest() {
-		// Called before sending data to user, to put time in log
-		if (query != null)
-			logger.info("Request query " + query.getQuery() + " finished in "
-					+ (new Double(new Date().getTime() - reqstart.getTime()))
-					/ 1000.0 + "s");
-		if (query != null && query.getRestrictsTree() != null) {
-			logger.debug("Tree string:" + query.getRestrictsTree().toString());
+		// Called before sending data to the client, used for the logging purposes.
+		if (query != null && logger.isInfoEnabled());
+			logger.info("Request query {} processed in {}s",query.getQuery(),(new Double(new Date().getTime() - reqstart.getTime()))/1000.0);
+		if (query != null && logger.isDebugEnabled() && query.getRestrictsTree() != null) {
+			logger.debug("Tree string:{}" + query.getRestrictsTree().toString());
 			for (RestrictExpression re : query.getRestrictsList()) {
-				logger.debug("Query param:" + re.getColumnName() + "comp"
-						+ re.getOperator() + "val" + re.getValue());
+				logger.debug("Query keyword: {}", re);
 			}
 		}
 	}
@@ -246,6 +236,8 @@ public class RequestProcess implements RequestInterface {
 	void addError(String message){
 		this.errors.add(message);
 	}
+
+
 
 
 
