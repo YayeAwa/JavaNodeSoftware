@@ -9,23 +9,27 @@ import org.vamdc.dictionary.Restrictable;
 
 
 /**
- * Interface a database plugin must implement to work with java VAMDC-TAP implementation.
+ * Interface a database plugin must implement to work with the Java VAMDC-TAP node software implementation.
  * @author doronin
  *
  */
 public interface DatabasePlugin {
 
 	/**
-	 * Get restrictables supported by this tapservice implementation.<br>
-	 * Must be a subset of VAMDC dictionary:<br>
+	 * Get a collection of Restrictable keywords supported by this node.<br>
+	 * Must be a subset of the VAMDC dictionary:<br>
 	 * http://dictionary.vamdc.org/
 	 * 
-	 * @return collection of Restrictable keywords from VAMDC dictionary
+	 * @return a collection of Restrictable keywords from VAMDC dictionary
 	 */
 	public abstract Collection<Restrictable> getRestrictables();
 	
 	/**
-	 * Build XSAMS data from user request
+	 * Build XSAMS data from user request.
+	 * Methods of RequestInterface XSAMSManager should be called internally to construct the XSAMS tree.
+	 * 
+	 * 
+	 * 
 	 * @param userRequest request and response wrapper, contains user query object and XSAMS output wrapper 
 	 */
 	public abstract void buildXSAMS (RequestInterface userRequest);
