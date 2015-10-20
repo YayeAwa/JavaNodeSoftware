@@ -19,6 +19,14 @@ public class InvalidQueryTest{
 		assertTrue(qp.getRestrictsTree().isValid());
 	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void testNullQuery(){
+		
+		Query qp = VSSParser.parse(null);
+		
+		assertTrue(qp.getRestrictsTree().isValid());
+	}
+	
 	/**
 	 * Test to reveal a null-pointer exception on invalid query
 	 */
