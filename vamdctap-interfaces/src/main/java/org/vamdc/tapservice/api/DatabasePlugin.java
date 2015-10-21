@@ -25,10 +25,8 @@ public interface DatabasePlugin {
 	public abstract Collection<Restrictable> getRestrictables();
 	
 	/**
-	 * Build XSAMS data from user request.
+	 * Build XSAMS document from the incoming request.
 	 * Methods of RequestInterface XSAMSManager should be called internally to construct the XSAMS tree.
-	 * 
-	 * 
 	 * 
 	 * @param userRequest request and response wrapper, contains user query object and XSAMS output wrapper 
 	 */
