@@ -32,6 +32,13 @@ public class FactoryTest {
 	}
 	
 	@Test
+	public void testParseAnotherQuery(){
+		String query="SELECT ALL WHERE ( AtomSymbol = 'Mg' ) AND (RadTransWavelength >= 5100 AND RadTransWavelength <= 5200);";
+		Query parsed = VSSParser.parse(query);
+		assertTrue(parsed.getRestrictsTree()!=null);
+	}
+	
+	@Test
 	@Ignore
     public void speedTest(){
     	long startTime = System.currentTimeMillis();

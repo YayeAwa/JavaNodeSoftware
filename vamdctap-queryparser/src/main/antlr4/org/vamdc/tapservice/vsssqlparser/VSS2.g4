@@ -98,12 +98,13 @@ ordering_term
 
 result_column
  : '*'
+ | K_ALL
  | table_name '.' '*'
  | expr ( K_AS? column_alias )?
  ;
 
 select_core
- : K_SELECT ( K_DISTINCT | K_ALL )? result_column ( ',' result_column )*
+ : K_SELECT result_column ( ',' result_column )*
    ( K_WHERE select_where )?
    ( K_GROUP K_BY expr ( ',' expr )* ( K_HAVING expr )? )?
  ;
