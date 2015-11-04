@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.EnumSet;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.vamdc.dictionary.Restrictable;
@@ -41,6 +43,8 @@ public class FactoryTest {
 	@Test
 	@Ignore
     public void speedTest(){
+		Level loglvl = Logger.getRootLogger().getLevel();
+		Logger.getRootLogger().setLevel(Level.OFF);
     	long startTime = System.currentTimeMillis();
     	long cumul=0;
     	Integer myval=0;
@@ -57,6 +61,7 @@ public class FactoryTest {
     	long stopTime = System.currentTimeMillis();
         long elapsedTime = stopTime - startTime;
         System.out.println( "Hello World! I have iterated "+(myval+1)+" times and summed up "+cumul+" taking "+elapsedTime+"ms "+"for queries like "+query);
+        Logger.getRootLogger().setLevel(loglvl);
     }
 	
 }
