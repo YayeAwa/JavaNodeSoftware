@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -123,6 +124,16 @@ public class RequestProcess implements RequestInterface {
 			lastModified = date;
 		}
 	}
+	
+	@Override
+	public Date getLastModified() {
+		return this.lastModified;
+	}
+	
+	@Override
+	public String getUUID(String requestType) {
+		return "basecol:"+UUID.randomUUID()+":"+requestType;
+	}
 
 	/**
 	 * Set headers for response, based on the XSAMS document metrics
@@ -200,7 +211,7 @@ public class RequestProcess implements RequestInterface {
 	}
 	
 	// Returns response with all headers set
-	Response getResponse() {
+	public Response getResponse() {
 		ResponseBuilder myrb;
 		XSAMSMetrics metrics = new XSAMSMetrics((XSAMSData) xsamsroot);
 		if (!this.isValid()) {
@@ -243,9 +254,4 @@ public class RequestProcess implements RequestInterface {
 	void addError(String message){
 		this.errors.add(message);
 	}
-
-
-
-
-
 }

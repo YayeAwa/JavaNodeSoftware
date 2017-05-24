@@ -3,6 +3,7 @@ package org.vamdc.tapservice;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
@@ -14,7 +15,7 @@ import org.vamdc.tapservice.util.DBPlugTalker;
 @Path("/TAP")
 public class TAPImpl implements TAPInterface {
 	@Override
-	public Response getSyncResponse(String requestType, String version,
+	public Response getSyncResponse(HttpServletRequest requestHttp ,String requestType, String version,
 			String queryLang, String query, String outputFormat,
 			Integer recordsLimit, String RequestID) {
 		
@@ -29,19 +30,20 @@ public class TAPImpl implements TAPInterface {
 		
 		//Return the document
 		myrequest.finishRequest();
-		return myrequest.getResponse();
+		Response res = myrequest.getResponse();
+		new QueryStoreNotification(requestHttp,res, myrequest);
+		return res;
 	}
 
 	@Override
-	public Response postSyncQuery(String requestType, String version,
+	public Response postSyncQuery(HttpServletRequest requestHttp, String requestType, String version,
 			String queryLang, String query, String outputFormat,
 			Integer recordsLimit, String RequestID) {
-		return this.getSyncResponse(requestType, version, queryLang, query, outputFormat, recordsLimit, RequestID);
-		
+		return this.getSyncResponse(requestHttp,requestType, version, queryLang, query, outputFormat, recordsLimit, RequestID);
 	}
 
 	@Override
-	public Response getSyncHead(String requestType, String version,
+	public Response getSyncHead(HttpServletRequest requestHttp, String requestType, String version,
 			String queryLang, String query, String outputFormat,
 			Integer recordsLimit, String RequestID) {
 		
@@ -58,7 +60,9 @@ public class TAPImpl implements TAPInterface {
 		
 		//Return the document headers
 		myrequest.finishRequest();
-		return myrequest.getHeadResponse(metrics).build();
+		Response res = myrequest.getHeadResponse(metrics).build();
+		new QueryStoreNotification(requestHttp,res, myrequest);
+		return res;
 	}
 	
 	private void verifyParameters(String queryLang, String outputFormat,

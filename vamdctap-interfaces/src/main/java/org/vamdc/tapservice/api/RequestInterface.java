@@ -76,6 +76,18 @@ public interface RequestInterface {
 	 * Set the date corresponding to the last-modified date response header
 	 * @param date java.util.Date reflecting the newest response record date
 	 */
-	public abstract void setLastModified(Date date); 
+	public abstract void setLastModified(Date date);
+	
+	/**
+	 * Get the date corresponding t the last-modification of the database
+	 * @return
+	 */
+	public abstract Date getLastModified(); 
+	
+	/**
+	 * Get the unique ID of the request
+	 * @return the unique id of the request
+	 */
+	public abstract String getUUID(String requestType);
 
 }

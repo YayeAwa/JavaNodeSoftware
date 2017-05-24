@@ -1,5 +1,6 @@
 package org.vamdc.tapservice.api;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.HEAD;
@@ -7,6 +8,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 
 
 
@@ -19,6 +21,7 @@ public interface TAPInterface {
 	@GET
 	@Produces({"application/x-xsams+xml","application/x-votable+xml","text/xml"})
 	public abstract Object getSyncResponse(
+			@Context HttpServletRequest requestHttp,
 			@QueryParam("REQUEST") String requestType,
 			@QueryParam("VERSION") String version,
 			@QueryParam("LANG") String queryLang,
@@ -32,6 +35,7 @@ public interface TAPInterface {
 	@POST
 	@Produces({"application/x-xsams+xml","application/x-votable+xml","text/xml"})
 	public abstract Object postSyncQuery(
+			@Context HttpServletRequest requestHttp,
 			@FormParam("REQUEST") String requestType,
 			@FormParam("VERSION") String version,
 			@FormParam("LANG") String queryLang,
@@ -45,6 +49,7 @@ public interface TAPInterface {
 	@HEAD
 	@Produces({"application/x-xsams+xml","application/x-votable+xml","text/xml"})
 	public abstract Object getSyncHead(
+			@Context HttpServletRequest requestHttp,
 			@QueryParam("REQUEST") String requestType,
 			@QueryParam("VERSION") String version,
 			@QueryParam("LANG") String queryLang,
