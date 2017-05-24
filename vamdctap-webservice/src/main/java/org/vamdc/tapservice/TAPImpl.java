@@ -3,11 +3,7 @@ package org.vamdc.tapservice;
 
 import java.util.Map;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.HEAD;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.vamdc.dictionary.HeaderMetrics;
@@ -18,9 +14,6 @@ import org.vamdc.tapservice.util.DBPlugTalker;
 @Path("/TAP")
 public class TAPImpl implements TAPInterface {
 	@Override
-	@Path("/sync")
-	@GET
-	@Produces({"application/x-xsams+xml","application/x-votable+xml","text/xml"})
 	public Response getSyncResponse(String requestType, String version,
 			String queryLang, String query, String outputFormat,
 			Integer recordsLimit, String RequestID) {
@@ -40,9 +33,6 @@ public class TAPImpl implements TAPInterface {
 	}
 
 	@Override
-	@POST
-	@Path("/sync")
-	@Produces({"application/x-xsams+xml","application/x-votable+xml","text/xml"})
 	public Response postSyncQuery(String requestType, String version,
 			String queryLang, String query, String outputFormat,
 			Integer recordsLimit, String RequestID) {
@@ -51,9 +41,6 @@ public class TAPImpl implements TAPInterface {
 	}
 
 	@Override
-	@Path("/sync")
-	@HEAD
-	@Produces({"application/x-xsams+xml","application/x-votable+xml","text/xml"})
 	public Response getSyncHead(String requestType, String version,
 			String queryLang, String query, String outputFormat,
 			Integer recordsLimit, String RequestID) {

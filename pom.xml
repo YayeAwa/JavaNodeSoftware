@@ -3,16 +3,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.vamdc.tap</groupId>
 	<artifactId>vamdctap-parent</artifactId>
-	<version>12.07r2-SNAPSHOT</version>
+	<version>12.07r3-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
 	<name>Parent project for Java VAMDC-TAP node software</name>
 
 	<organization>
 		<name>VAMDC</name>
 		<url>http://www.vamdc.org/</url>
 	</organization>
-	
+
 	<modules>
 		<module>vamdctap-queryparser</module>
 		<module>vamdctap-querymapper</module>
@@ -20,13 +20,13 @@
 		<module>vamdctap-webservice</module>
 		<module>vamdctap-pluginparent</module>
 	</modules>
-	
+
 	<scm>
 		<connection>scm:git:git@github.com:misdoro/JavaNodeSoftware.git</connection>
 		<url>scm:git:git@github.com:misdoro/JavaNodeSoftware.git</url>
 		<developerConnection>scm:git:git@github.com:misdoro/JavaNodeSoftware.git</developerConnection>
 	</scm>
-	
+
 	<repositories>
 		<repository>
 			<id>nexus</id>
@@ -34,14 +34,14 @@
 			<url>http://nexus.vamdc.org/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<dependency.cayenne.version>3.1</dependency.cayenne.version>
 		<dependency.junit.version>4.12</dependency.junit.version>
 		<dependency.slf4j.version>1.7.12</dependency.slf4j.version>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -55,7 +55,7 @@
 			<version>${dependency.slf4j.version}</version>
 		</dependency>
 	</dependencies>
-	
+
 	<distributionManagement>
 		<!-- Publish versioned releases here -->
 		<repository>
@@ -63,7 +63,7 @@
 			<name>VAMDC Releases</name>
 			<url>http://nexus.vamdc.org/nexus/content/repositories/releases</url>
 		</repository>
-		
+
 		<!-- Publish snapshots here -->
 		<snapshotRepository>
 			<id>nexus</id>
@@ -71,6 +71,18 @@
 			<url>http://nexus.vamdc.org/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
+
+	<profiles>
+		<profile>
+			<id>doclint-java8-disable</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<properties>
+				<additionalparam>-Xdoclint:none</additionalparam>
+			</properties>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>
@@ -90,5 +102,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

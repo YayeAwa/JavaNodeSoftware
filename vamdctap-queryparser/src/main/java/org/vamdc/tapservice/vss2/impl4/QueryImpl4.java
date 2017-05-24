@@ -49,6 +49,9 @@ public class QueryImpl4 extends VSS2ParseListener implements Query {
 
 
 	private void parse(String query) {
+		if (query==null){
+			throw new IllegalArgumentException("The query can not be null");
+		}
 		ParseTree tree = getVSSParseTree(query);
 		ParseTreeWalker walker = new ParseTreeWalker();
 		//All the variables are initialized while walking the tree

@@ -16,6 +16,7 @@ import org.vamdc.tapservice.vss2.RestrictExpression;
  * For more advanced query mapping library see org.vamdc.tapservice.querymapper package.
  * 
  */
+@Deprecated
 public class QueryMapper {
 	/**
 	 * Simple mapper from the VSS LogicNode tree to Cayenne Expression
