@@ -132,7 +132,7 @@ public class RequestProcess implements RequestInterface {
 	
 	@Override
 	public String getUUID(String requestType) {
-		return "basecol:"+UUID.randomUUID()+":"+requestType;
+		return Setting.dbname.getValue()+":"+UUID.randomUUID()+":"+requestType;
 	}
 
 	/**
@@ -211,7 +211,7 @@ public class RequestProcess implements RequestInterface {
 	}
 	
 	// Returns response with all headers set
-	public Response getResponse() {
+	Response getResponse() {
 		ResponseBuilder myrb;
 		XSAMSMetrics metrics = new XSAMSMetrics((XSAMSData) xsamsroot);
 		if (!this.isValid()) {

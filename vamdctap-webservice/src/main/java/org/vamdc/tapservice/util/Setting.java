@@ -21,10 +21,16 @@ public enum Setting {
 	class_plugin("database_plug_class","org.vamdc.database.tap.OutputBuilder"),
 	test_queries("test_queries","select species where atomsymbol like '%';select * where inchikey='UGFAIRIUMAVXCW-UHFFFAOYSA-N'"),
 	returnables("returnables","keyword1;keyword2;..."),
-	processors("processors","ivo://vamdc/processor_1#ivo://vamdc/processor2")
+	processors("processors","ivo://vamdc/processor_1#ivo://vamdc/processor2"),
+	dbname("dbname","basecol"),
+	querystoreurl("querystoreurl","https://querystore.vamdc.eu/NotificationListener?"),
+	vamdcnode_version("outputFormatVersion", "12.07"),
+	querystore_agent("querystore_agent","VAMDC Query store"),
+	tap_url("tap_url","http://basecol2015.vamdc.eu/12_07/TAP/sync?"),
+	resource("accededResource","http://basecol2015.vamdc.org/12_07/"),
+	secret("secret","vamdcQS")
 	
 	;
-	
 	
 	
 	private String property;
