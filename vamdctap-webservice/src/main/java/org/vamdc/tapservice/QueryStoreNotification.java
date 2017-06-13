@@ -5,6 +5,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -34,11 +35,14 @@ public class QueryStoreNotification extends Thread{
 	
 	private void callPostRequest(Response res) throws IOException{	
 		
+		SimpleDateFormat  simpleFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
 		Map<String,String> params = new HashMap<String,String>();
 		params.put(Setting.secret.getKey(), Setting.secret.getValue());
 		params.put("queryToken", myRequest.getUUID(requestHttp.getMethod().toLowerCase()));
 		params.put(Setting.resource.getKey(), Setting.resource.getValue());
-		params.put("resourceVersion",myRequest.getLastModified().toString());
+		params.put("usedClient", requestHttp.getHeader("user-agent"));
+		params.put("resourceVersion",simpleFormat.format(myRequest.getLastModified()));
 		params.put("accessType",requestHttp.getMethod().toLowerCase());
 		params.put(Setting.vamdcnode_version.getKey(),Setting.vamdcnode_version.getValue());
 		params.put("dataURL",Setting.tap_url.getValue()+URLEncoder.encode(requestHttp.getQueryString(),"UTF-8"));
@@ -64,7 +68,7 @@ public class QueryStoreNotification extends Thread{
 			data.append("=");
 			data.append(param.getValue().trim());
 		}
-
+		
 		//create the connection
 		URL url = new URL(queryStoreUrl);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
